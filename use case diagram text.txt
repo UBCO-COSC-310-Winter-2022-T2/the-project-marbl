@@ -1,0 +1,54 @@
+@startuml
+
+skin rose
+left to right direction
+actor user
+
+
+
+rectangle {
+
+'(send message to group) AS groupmsg
+'(send direct message) AS dm
+'(view direct messages of friend) AS viewdms
+(view a group's messages) AS viewgroupmsgs
+
+
+user -right- (Create Account)
+user -- (Login [everything includes this except create account])
+user --(log out)
+
+(view chat history) as viewmsgs
+user -- (viewmsgs) 
+'(viewmsgs) <.. (viewdms) : <<include>>
+(viewmsgs) <.. (viewgroupmsgs) : <<include>>
+
+user --(add friend)
+user -- (remove friend)
+user --(block user)
+user --(unblock user)
+
+(viewgroupmsgs) <.. (add user to group)  : <<extend>>
+(create group) <... (add user to group)  : <<extend>>
+
+
+user -- (create group)
+(viewgroupmsgs) <.. (leave group) : <<extend>>
+(viewgroupmsgs) <.. (kick member) : <<extend>>
+(viewgroupmsgs) <.. (group invite access control) : <<extend>>
+(viewgroupmsgs) <.. (transfer adminship) : <<extend>>
+
+
+
+(send message) AS sendmsg
+(viewmsgs) <.. (sendmsg) : <<extend>>
+(sendmsg) <.. (send files) : <<extend>>
+(sendmsg) <.. (send image) : <<extend>>
+user -- (view online users)
+
+
+
+}
+
+}
+@enduml
