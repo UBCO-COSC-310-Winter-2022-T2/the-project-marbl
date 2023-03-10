@@ -25,8 +25,8 @@ user -- (viewmsgs)
 
 user --(add friend)
 user -- (remove friend)
-user --(block user)
-user --(unblock user)
+'user --(block user)
+'user --(unblock user)
 
 (viewgroupmsgs) <.. (add user to group)  : <<extend>>
 (create group) <... (add user to group)  : <<extend>>
@@ -35,15 +35,15 @@ user --(unblock user)
 user -- (create group)
 (viewgroupmsgs) <.. (leave group) : <<extend>>
 (viewgroupmsgs) <.. (kick member) : <<extend>>
-(viewgroupmsgs) <.. (group invite access control) : <<extend>>
+'(viewgroupmsgs) <.. (group invite access control) : <<extend>>
 (viewgroupmsgs) <.. (transfer adminship) : <<extend>>
 
 
 
 (send message) AS sendmsg
 (viewmsgs) <.. (sendmsg) : <<extend>>
-(sendmsg) <.. (send files) : <<extend>>
-(sendmsg) <.. (send image) : <<extend>>
+'(sendmsg) <.. (send files) : <<extend>>
+'(sendmsg) <.. (send image) : <<extend>>
 user -- (view online users)
 
 
