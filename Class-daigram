@@ -1,0 +1,78 @@
+@startuml
+
+skin rose
+
+title Types - Class Diagram
+
+
+skinparam componentStyle uml2
+
+
+class Message{
+    - message : String 
+    - date : Date 
+    - author : User 
+    +getMessage() : String
+    +getDate() : String
+    +getAuthor() : String
+    +setMessage(String message) : void
+}
+
+class User {
+-username : String 
+-password : String 
+-email : String 
+
++getUsername() : String
++getFriends() : List<User>
++addFriend(String username) : boolean
++removeFriend(User friend) : boolean
+}
+
+User "1"--"0..*" User : hasFriends
+
+
+Abstract Observer <<Abstract>> {
+    +subject : Subject
+    +update(): void
+}
+
+Abstract Subject <<Abstract>> {
+  -observers : List<Observer>
+  -state : int
+  +getState() : int
+  +setState() : void
+  +attach() : void
+  +notifyAllObservers() : void
+}
+
+Subject "1"--"0..*" Observer : Uses
+
+Class BinaryObserver {
+    +subject : Subject
+    +update(): void
+}
+
+Class groupChat {
+    -admin : User
+    +getAdmin() : User
+    +setAdmin(User user) : void
+ }
+ 
+ Class chat {
+    +getMessageHistory() : List<Message>
+}
+
+chat "1" -- "0..*" Message : Has
+
+groupChat---|> chat : extends
+chat ---|> Subject : extends
+
+BinaryObserver ---|> Observer : extends
+
+class chatServer << (S,#FF7700) Singleton >>{
+    
+}
+chatServer "1" -- "0..*" chat : Has
+
+@enduml
