@@ -1,0 +1,81 @@
+@startuml
+
+skin rose
+
+title  CLACK by MARBL Level 1
+allowmixing
+left to right direction
+
+usecase "Client" as C
+usecase "Email" as E
+
+rectangle "Server" {
+
+class "1 System" AS CA{
+    Create Account
+}
+class "2 System" AS L{
+    Login User
+}
+class "3 System" AS LO{
+    Logout User
+}
+class "4 System" AS AF{
+    Add Friend
+}
+class "5 System" AS RF{
+    Remove Friend
+}
+class "6 System" AS CG{
+    Create Group
+}
+class "7 System" AS SM{
+    Send Message
+}
+class "9 System " as PR{
+    Password Recovery
+    }
+class "8 View History" as VH{
+    View chat history
+    View message history of friend
+    }
+    
+class "10 System" as LG{
+    Leave Group
+    }
+
+rectangle "D2: Chat history Database" as CDB
+
+rectangle "D1: User Info Database" as UDB
+
+PR --> UDB : update password
+PR <-> E : request email/password change
+E <-left-> C : open change password request
+C -> PR : request/update passowrd
+CA  --> UDB : user password email and user name
+L <-- UDB : username and password
+C <-> L : username & password
+C -> CA :username, email, password
+C -> RF : Friend ID
+C -> SM : Message, Destination
+C -> CG: Group Info
+C -> LG: Group ID
+LG -> CDB : Group ID
+RF --> CDB : remove friend ID
+C -> AF : Friend ID
+C -> LO : user instance data
+LO --> UDB : user specific instance data
+LO --> CDB : chat specific instance data
+VH <-- CDB : chat history and room data
+C <---- VH : chat history and room data
+CG --> CDB : group info
+AF -down-> UDB : freind ID pair to user
+SM -down-> CDB : message data
+}
+
+
+
+
+
+
+
