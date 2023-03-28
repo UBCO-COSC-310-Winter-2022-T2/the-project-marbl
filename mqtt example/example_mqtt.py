@@ -37,8 +37,11 @@ client.connect(broker)  # connect to broker
 client.loop_start() #start loop (need loop to run callback functions)
 
 client.subscribe("chatroom 1")
-client.publish("chatroom 1", client_name + ": hello world 1!")
-time.sleep(13)
+
+while True: 
+    msg = input()
+    client.publish("chatroom 1", client_name + " " + msg)
+
 
 client.loop_stop() #stop loop
 client.disconnect() #disconnect
