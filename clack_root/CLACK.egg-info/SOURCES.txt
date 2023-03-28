@@ -1,0 +1,16 @@
+setup.py
+CLACK.egg-info/PKG-INFO
+CLACK.egg-info/SOURCES.txt
+CLACK.egg-info/dependency_links.txt
+CLACK.egg-info/entry_points.txt
+CLACK.egg-info/top_level.txt
+back_end/Main.py
+back_end/Message.py
+back_end/User.py
+back_end/Subject.py
+back_end/IObserver.py
+back_end/ChatServer.py
+back_end/__init__.py
+test/Test_Message.py
+test/Test_Observer_Pattern.py
+test/__init__.py
