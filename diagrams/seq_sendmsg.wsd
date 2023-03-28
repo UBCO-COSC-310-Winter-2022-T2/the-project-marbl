@@ -1,0 +1,44 @@
+@startuml
+
+skin rose
+
+title  Send Message
+actor User
+participant Client
+participant Server
+participant Database as DB
+
+activate User
+User -> Client : input message
+Activate Client
+User -> Client : send msg pls
+Client -[#blue]> Server : sendMessage(msg, author, timedate, mychatid)
+alt
+    activate Server
+    Server -> DB : INSERT msg
+    activate DB
+    alt
+        Server <-- DB : INSERT success
+    else #pink
+        Server <-- DB : INSERT failure
+        deactivate DB
+        Server -> Server : dont handle for now
+    end
+    Server -> DB : SELECT chathistory where chatid = mychatid
+    activate DB
+    alt
+        Server <-- DB : here's your shit (chat that was just updated)
+    else #pink
+        Server <-- DB : SELECT failure
+        deactivate DB
+        Server -> Server : dont handle for now
+    end
+    Client <[#blue]- Server : sendMsgHistoryToUsers(chat)
+    deactivate Server
+    User <- Client : y'all recieved a new message
+
+else #pink Timeout
+    User <- Client : message failed to send
+    deactivate Client
+end
+@enduml
