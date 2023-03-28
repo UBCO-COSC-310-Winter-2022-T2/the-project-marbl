@@ -8,7 +8,7 @@ def testToString():
 def testSetMessage():
     m = msg.Message()
     m.setMessage("hello world")
-    assert m.getMessage() == 'hellow world'
+    assert m.getMessage() == 'hello world'
 
 def testConstructor():
     m = msg.Message('hi', usr.User())
