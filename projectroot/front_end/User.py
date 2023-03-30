@@ -28,7 +28,7 @@ class User:
     def notifyFriendsOfYourStatus(self) -> None:
         pass
 
-    def getFriends(self) -> List['User']:
+    def getFriends(self) -> list:
         pass
 
     def addFriend(self, username: str) -> bool:
@@ -40,17 +40,17 @@ class User:
     def updateChat(self) -> None:
         pass
 
-    def send(self, chat: 'Chat', message: str) -> None:
-        pass
-
-    def receive(self, chat: 'Chat', message: Message) -> None:
-        pass
-
     def joinChat(self, chat: 'Chat') -> None:
         pass
 
     def leaveChat(self, chat: 'Chat') -> None:
         pass
 
-    def findUserByUsername(self, username: str) -> 'User':
+    def findUserByUsername(self, username: str) -> str:
+        pass
+    
+    def send(self, chat: 'Chat', message: str) -> None:
+        pass
+
+    def receive(self, chat: 'Chat', message: Message) -> None:
         pass

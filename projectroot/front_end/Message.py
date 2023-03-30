@@ -10,7 +10,7 @@ class Message:
     def getDate(self) -> str:
         pass
 
-    def getAuthor(self) -> 'User':
+    def getAuthor(self) -> str:
         pass
 
     def setMessage(self, message: str) -> None:
