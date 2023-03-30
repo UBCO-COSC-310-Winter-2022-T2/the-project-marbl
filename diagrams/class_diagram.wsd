@@ -6,7 +6,8 @@ title Types - Class Diagram
 
 
 skinparam componentStyle uml2
-
+class Client{}
+Client "1"--"1" UI: Uses
 
 class Message{
     - message : String
@@ -44,12 +45,28 @@ class User <<Observer>> {
 
 User "1"--"0..*" User : hasFriends
 
-Class chatMediator <<Mediator>> {
+Class MQTTClient {
     +sendMessage(String user) : void
     +addUser(User) : void
+    +start_connection() : bool
+    +end_connection() : bool
+    +subscribe(chat) : bool
+    +publish(chat,msg) : bool
+    +on_message(client, userdata, msg) : event
+    +on_disconnect(client,userdata, flags, rc)  : event
+    +on_connect(client,userdata, flags, rc):event
 }
 
+commandInterface "1"--"1" MQTTClient: Uses
 
+Class ServerConnection {
+    +start_connection() : bool
+    +end_connection() : bool
+    +make_get_request() : result
+    +make_post_request() : result
+ }
+ 
+ commandInterface "1"--"1" ServerConnection: Uses
 
 Abstract Observer <<Abstract>> {
     +subject : Subject
@@ -97,30 +114,7 @@ groupChat---|> chat : extends
 chat ---|> Subject : For reference
 User ---|> Observer : For reference
 
-class chatServer << (S,#FF7700) Singleton >>{
-    This is essentially the database
-    --
-    -Instance : chatServer
-    -myDBConnection : DBConnection
-    -currentlyLoggedInUser : User
-    -currentChatViewed : chat
-    -allChats : List<chat> //might not need
-    -allUsers : List<User> //night not need
-    --
-    -chatServer()
-    +getInstance() : chatServer (if first time, creates chatServer and
-    connects to DB)
-    +getDBConnection() : DBConnection
-    +createChat(List<User> users) : void
-    +createUser(String username, String password, String email) : boolean
-    +getCurrentlyLoggedInUser() : User
-    +getCurrentChatViewed() : chat
-    +setCurrentChatViewed() : void
-}
-chatServer "1" -- "0..*" chat : Has
-chatServer "1" -- "1" User : Has
-
-class commandInterface <<Command>> {
+class commandInterface <<Mediator>> {
     Interact with the system through here by calling the methods,
     this will interact with the internal system methods and classes
     --
@@ -144,7 +138,6 @@ class commandInterface <<Command>> {
 }
 
 commandInterface "1" -- "1" User : uses
-commandInterface "1" -- "1" chatServer : uses
 commandInterface "1" -- "1" chat: uses
 
 class UI {
