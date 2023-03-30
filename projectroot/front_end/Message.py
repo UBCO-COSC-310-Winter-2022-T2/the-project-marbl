@@ -1,5 +1,5 @@
 class Message:
-    def __init__(self, message: str, author: 'User'):
+    def __init__(self, message: str, author):
         self._message = message
         self._date = datetime.now()
         self._author = author

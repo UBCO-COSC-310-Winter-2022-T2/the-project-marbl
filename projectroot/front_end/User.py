@@ -7,50 +7,51 @@ class User:
         self._chats = []
         self._onlineStatus = False
 
-    def getUsername(self) -> str:
+    def get_username(self) -> str:
         pass
 
-    def setUsername(self, newUsername: str) -> None:
+    def set_username(self, new_username: str) -> None:
         pass
 
-    def verifyPassword(self, enteredPassword: str) -> bool:
+    def verify_password(self, entered_password: str) -> bool:
         pass
 
-    def setPassword(self, newPassword: str) -> None:
+    def set_password(self, new_password: str) -> None:
         pass
 
-    def setOnlineStatus(self, status: bool) -> None:
+    def set_online_status(self, status: bool) -> None:
         pass
 
-    def getOnlineStatus(self) -> bool:
+    def get_online_status(self) -> bool:
         pass
 
-    def notifyFriendsOfYourStatus(self) -> None:
+    def notify_friends_of_your_status(self) -> None:
         pass
 
-    def getFriends(self) -> list:
+    def get_friends(self) -> list:
         pass
 
-    def addFriend(self, username: str) -> bool:
+    def add_friend(self, username: str) -> bool:
         pass
 
-    def removeFriend(self, friend: 'User') -> bool:
+    def remove_friend(self, friend) -> bool:
         pass
 
-    def updateChat(self) -> None:
+    def update_chat(self) -> None:
         pass
 
-    def joinChat(self, chat: 'Chat') -> None:
+    def join_chat(self, chat) -> None:
         pass
 
-    def leaveChat(self, chat: 'Chat') -> None:
+    def leave_chat(self, chat) -> None:
         pass
 
-    def findUserByUsername(self, username: str) -> str:
-        pass
-    
-    def send(self, chat: 'Chat', message: str) -> None:
+    def find_user_by_username(self, username: str) -> str:
         pass
 
-    def receive(self, chat: 'Chat', message: Message) -> None:
+    def send(self, chat, message) -> None:
         pass
+
+    def receive(self, chat, message) -> None:
+        pass
+
