@@ -97,19 +97,17 @@ groupChat---|> chat : extends
 chat ---|> Subject : For reference
 User ---|> Observer : For reference
 
-class chatServer << (S,#FF7700) Singleton >>{
-    This is essentially the database
+class serverConnection << (S,#FF7700) Singleton >>{
+    Ensures only one connection to database
     --
-    -Instance : chatServer
+    -Instance : serverConnection
     -myDBConnection : DBConnection
     -currentlyLoggedInUser : User
     -currentChatViewed : chat
-    -allChats : List<chat> //might not need
-    -allUsers : List<User> //night not need
     --
-    -chatServer()
-    +getInstance() : chatServer (if first time, creates chatServer and
-    connects to DB)
+    -serverConnection()
+    +getInstance() : serverConnection (if first time, creates serverConnection and
+    connects to firebase)
     +getDBConnection() : DBConnection
     +createChat(List<User> users) : void
     +createUser(String username, String password, String email) : boolean
@@ -117,8 +115,8 @@ class chatServer << (S,#FF7700) Singleton >>{
     +getCurrentChatViewed() : chat
     +setCurrentChatViewed() : void
 }
-chatServer "1" -- "0..*" chat : Has
-chatServer "1" -- "1" User : Has
+serverConnection "1" -- "0..*" chat : Has
+serverConnection "1" -- "1" User : Has
 
 class commandInterface <<Command>> {
     Interact with the system through here by calling the methods,
@@ -144,7 +142,7 @@ class commandInterface <<Command>> {
 }
 
 commandInterface "1" -- "1" User : uses
-commandInterface "1" -- "1" chatServer : uses
+commandInterface "1" -- "1" serverConnection : uses
 commandInterface "1" -- "1" chat: uses
 
 class UI {
