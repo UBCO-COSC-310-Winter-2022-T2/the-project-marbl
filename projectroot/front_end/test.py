@@ -1,7 +1,7 @@
-from MQTTClient import MQTTClient
+from Getters import getMQTTClient
 
 # Initialize the MQTT client
-mqtt_client = MQTTClient("test.mosquitto.org")
+mqtt_client = getMQTTClient("test.mosquitto.org")
 
 # Start the connection
 if mqtt_client.start_connection():
