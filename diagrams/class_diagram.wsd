@@ -45,7 +45,7 @@ class User <<Observer>> {
 
 User "1"--"0..*" User : hasFriends
 
-Class MQTTClient {
+Class MQTTClient <<Singleton>> {
     +sendMessage(String user) : void
     +addUser(User) : void
     +start_connection() : bool
@@ -56,33 +56,6 @@ Class MQTTClient {
     +on_disconnect(client,userdata, flags, rc)  : event
     +on_connect(client,userdata, flags, rc):event
 }
-
-commandInterface "1"--"1" MQTTClient: Uses
-
-Class ServerConnection {
-    +start_connection() : bool
-    +end_connection() : bool
-    +make_get_request() : result
-    +make_post_request() : result
- }
- 
- commandInterface "1"--"1" ServerConnection: Uses
-
-Abstract Observer <<Abstract>> {
-    +subject : Subject
-    +update(): void
-}
-
-Abstract Subject <<Abstract>> {
-    -observers : List<Observer>
-    -state : int
-    +getState() : int
-    +setState() : void
-    +attach() : void
-    +notifyAllObservers() : void
-}
-
-Subject "1"--"0..*" Observer : Uses
 
 
 Class groupChat {
@@ -111,39 +84,56 @@ chat "1" -- "0..*" Message : Has
 
 groupChat---|> chat : extends
 
-chat ---|> Subject : For reference
-User ---|> Observer : For reference
-
 class commandInterface <<Mediator>> {
     Interact with the system through here by calling the methods,
     this will interact with the internal system methods and classes
     --
     --
-    +getUsernameOfCurrentlyLoggedInUser() : String
-    +getCurrentlyLoggedInUser() : User
+    +getExistingSession()
     +getCurrentChatViewed() : chat
     +setCurrentChatViewed() : void
     +Login(username, password) : boolean
-    +Logout() : void
-    +ResetPassword(String newPassword) : void
-    +SendMessage(String msg): void
-    +addUserToChat(username) : void
-    +kickUserFromChat(username) : voidx
-    +transferAdminship(username, Chat chat) : void
-    +createChat(List<User> users) : void
     +createAccount(String username, String password, String email) : boolean
-    +addFriend(String username) : boolean
-    +removeFriend(String username) : void
-    +getFriends() : List<User>
 }
 
-commandInterface "1" -- "1" User : uses
-commandInterface "1" -- "1" chat: uses
+Session "1" -- "1" User : uses
+Session "1" -- "1" chat: uses
 
 class UI {
     +Buttons and Labels
 }
 
+class Session{
+    +idToken : string
+    +expiry : Date
+    +refreshToken : string
+    +isValid : boolean
+    +email : string
+    +getUsernameOfCurrentlyLoggedInUser() : String
+    +getCurrentlyLoggedInUser() : User
+    +ResetPassword(String newPassword) : void
+    +SendMessage(String msg): void
+    +addUserToChat(username) : void
+    +kickUserFromChat(username) : void
+    +transferAdminship(username, Chat chat) : void
+    +createChat(List<User> users) : void
+    +addFriend(String username) : boolean
+    +removeFriend(String username) : void
+    +getFriends() : List<User>
+    +Logout() : void
+}
+
+class SessionManager <<Singleton>>{
+    +idToken : string
+    isLoggedIn : boolean
+    +getExistingSession() : FirebaseSession
+    +sign_in_with_email_and_password(String email, String password)
+    +create_user_with_email_and_password(String email, String password)
+}
+
+Session "1" -- "1" MQTTClient : uses
+Session "1" -- "1" SessionManager : <<creates>>
 UI "1" -- "1" commandInterface : uses
+commandInterface "1" -- "1" SessionManager
 
 @enduml
