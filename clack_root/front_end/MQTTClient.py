@@ -43,9 +43,3 @@ class MQTTClient:
 
     def on_connect(self, client, userdata, flags, rc):
         pass
-
-    def sendMessage(self, user):
-        pass
-
-    def addUser(self, user):
-        pass
