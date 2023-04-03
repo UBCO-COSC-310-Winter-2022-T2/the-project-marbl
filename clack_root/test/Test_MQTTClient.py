@@ -1,5 +1,4 @@
 import pytest
-from unittest.mock import Mock
 from front_end.MQTTClient import MQTTClient
 
 def test_start_connection():
@@ -22,7 +21,6 @@ def test_subscribe():
     # set up the MQTT client object
     client = MQTTClient('test.mosquitto.org')
     assert client.subscribe('test_chat') == True
-
     assert client.subscribe('') == False
 
 def test_publish():

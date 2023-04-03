@@ -1,4 +1,4 @@
-from MQTTClient import MQTTClient
+from front_end.MQTTClient import MQTTClient
 
 instance = None
 def getMQTTClient(host: str) -> MQTTClient:
@@ -6,3 +6,6 @@ def getMQTTClient(host: str) -> MQTTClient:
     if(instance == None):
         instance = MQTTClient(host)
     return instance
+
+def getServerInstance():
+    pass
