@@ -1,5 +1,6 @@
 import firebase_admin
 import time
+import os
 
 cred_obj = firebase_admin.credentials.Certificate(os.path.abspath("./cosc310-marbl-firebase-adminsdk-8ced8-4927d63ad0.json"))
 default_app = firebase_admin.initialize_app(cred_obj, {
