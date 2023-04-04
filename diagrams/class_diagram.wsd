@@ -104,7 +104,7 @@ class UI {
 }
 
 class Session{
-    -chats : List<chat> // all messages currently saved by user, \n\t\t\t\twill be dropped when session is closed\n\t\t\t\tand re-populated as user views chats
+    -chats : List<chat> // all messages currently saved by user, \n\t\t\t\twill be dropped when session is closed\n\t\t\t\tand re-populated as user views chats, \n\t\t\t\tsorted on time
     -idToken : string
     -expiry : Date
     -refreshToken : string
