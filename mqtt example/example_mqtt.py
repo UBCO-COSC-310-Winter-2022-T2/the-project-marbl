@@ -22,7 +22,7 @@ def on_message(client, userdata, msg):
 ##################################
 
 broker = "test.mosquitto.org" #our broker server
-client_name = "adam"
+client_name = "baller"
 
 
 client = mqtt.Client(client_name) #create new instance
