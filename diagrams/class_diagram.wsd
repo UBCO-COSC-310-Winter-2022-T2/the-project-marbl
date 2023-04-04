@@ -46,6 +46,7 @@ class User <<Observer>> {
 User "1"--"0..*" User : hasFriends
 
 Class MQTTClient <<(S,red) Singleton>> {
+    -myMQTTClient : MQTTClient
     +sendMessage(String user) : void
     +addUser(User) : void
     +start_connection() : bool
