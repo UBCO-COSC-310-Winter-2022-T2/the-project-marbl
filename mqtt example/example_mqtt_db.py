@@ -1,7 +1,7 @@
 import firebase_admin
 import time
 
-cred_obj = firebase_admin.credentials.Certificate('./cosc310-marbl-firebase-adminsdk-8ced8-4927d63ad0.json')
+cred_obj = firebase_admin.credentials.Certificate(os.path.abspath("./cosc310-marbl-firebase-adminsdk-8ced8-4927d63ad0.json"))
 default_app = firebase_admin.initialize_app(cred_obj, {
 	'databaseURL':'https://cosc310-marbl-default-rtdb.firebaseio.com/'
 	})
