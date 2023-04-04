@@ -45,7 +45,7 @@ class User <<Observer>> {
 
 User "1"--"0..*" User : hasFriends
 
-Class MQTTClient <<Singleton>> {
+Class MQTTClient <<(S,red) Singleton>> {
     +sendMessage(String user) : void
     +addUser(User) : void
     +start_connection() : bool
@@ -104,6 +104,7 @@ class UI {
 }
 
 class Session{
+    -chats : List<chat> // all messages currently saved by user, \n\t\t\t\twill be dropped when session is closed\n\t\t\t\tand re-populated as user views chats
     +idToken : string
     +expiry : Date
     +refreshToken : string
@@ -123,7 +124,7 @@ class Session{
     +Logout() : void
 }
 
-class SessionManager <<Singleton>>{
+class SessionManager <<(S,red) Singleton>>{
     +idToken : string
     isLoggedIn : boolean
     +getExistingSession() : FirebaseSession
