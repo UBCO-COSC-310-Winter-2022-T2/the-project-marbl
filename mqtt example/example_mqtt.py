@@ -22,11 +22,7 @@ def on_message(client, userdata, msg):
 ##################################
 
 broker = "test.mosquitto.org" #our broker server
-<<<<<<< HEAD
-client_name = "LEVI"
-=======
-client_name = "adam"
->>>>>>> 451f505b57b93f0fac4ff4e836e2f0956bfcdf89
+client_name = "baller"
 
 
 client = mqtt.Client(client_name) #create new instance
@@ -40,13 +36,6 @@ print("Connecting to broker", broker)
 client.connect(broker)  # connect to broker
 client.loop_start() #start loop (need loop to run callback functions)
 
-<<<<<<< HEAD
-client.subscribe("marble/chatroom 1")
-
-while True: 
-    msg = input()
-    client.publish("marble/chatroom 1", client_name + " " + msg)
-=======
 client.subscribe("chatroom 1")
 client.subscribe("becks room")
 #client.subscribe("marbl/chatroom 1")
@@ -55,7 +44,6 @@ client.subscribe("marbl/#") # subscribe to all marbl topics (aka receive message
 while True: 
     msg = input()
     client.publish("marbl/chatroom 1", client_name + " " + msg) #send message to anyone subscribed to marbl/chatroom 1
->>>>>>> 451f505b57b93f0fac4ff4e836e2f0956bfcdf89
 
 
 client.loop_stop() #stop loop

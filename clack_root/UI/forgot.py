@@ -1,6 +1,8 @@
 from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButton, QVBoxLayout
 import sys
 
+from clack_root.UI.login import LoginWindow
+
 class ForgotPasswordScreen(QWidget):
     def __init__(self, login_screen_to_return):
         super().__init__()
