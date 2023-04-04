@@ -46,7 +46,11 @@ class User <<Observer>> {
 User "1"--"0..*" User : hasFriends
 
 Class MQTTClient <<(S,red) Singleton>> {
-    -myMQTTClient : MQTTClient
+    -myMQTTClientInstance : mqtt.Client 
+    -client_name : String
+    -broker : String
+    -MQTTClient() : new MQTTClient
+    +getMQTTClientInstance() : MQTTClient
     +sendMessage(String user) : void
     +addUser(User) : void
     +start_connection() : bool
@@ -126,8 +130,11 @@ class Session{
 }
 
 class SessionManager <<(S,red) Singleton>>{
-    +idToken : string
-    isLoggedIn : boolean
+    -idToken : string
+    -isLoggedIn : boolean
+    -mySessionManagerInstance : SessionManager
+    -SessionManager() : new SessionManager
+    +getSessionManagerInstance() : SessionManager
     +getExistingSession() : FirebaseSession
     +sign_in_with_email_and_password(String email, String password)
     +create_user_with_email_and_password(String email, String password)
