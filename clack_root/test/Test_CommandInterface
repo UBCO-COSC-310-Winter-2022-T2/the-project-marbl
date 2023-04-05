@@ -1,0 +1,12 @@
+import pytest
+import front_end.CommandInterface as CommandInterface
+
+def test_login_success(self):
+    session = SessionManager()
+    result = session.Login('example@gmail.com', 'example_password')
+    assert isinstance(result, str) and len(result) > 0
+
+def test_login_failure(self):
+    session = SessionManager()
+    result = session.Login('invalid_username', 'invalid_password')
+    assert isinstance(result, str) and "invalid" in result.lower()
