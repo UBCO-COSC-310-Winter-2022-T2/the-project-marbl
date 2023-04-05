@@ -1,4 +1,4 @@
-from front_end.Getters import getMQTTClient, getServerInstance
+from front_end.Getters import getMQTTClient, getSessionManager
 
 def test_getMQTTClient():
     # test that getMQTTClient returns the same MQTTClient instance
@@ -9,11 +9,8 @@ def test_getMQTTClient():
     client3 = getMQTTClient('')
     assert client1 is client3
 
-def test_getServerInstance():
-    # test that getServerInstance returns the same instance
-    client1 = getServerInstance('test_host')
-    client2 = getServerInstance('test_host')
+def test_getSessionManager():
+    # test that getSessionManager returns the same instance
+    client1 = getSessionManager()
+    client2 = getSessionManager()
     assert client1 is client2
-
-    client3 = getServerInstance('')
-    assert client1 is client3
