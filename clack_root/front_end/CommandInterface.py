@@ -1,5 +1,5 @@
-from SessionManager import SessionManager
 
+SM = None
 class CommandInterface:
     """
     Interact with the system through here by calling the methods,
@@ -19,11 +19,7 @@ class CommandInterface:
         pass
     
     def Login(self, username: str, password: str) -> str:
-        response = SessionManager.sign_in_with_email_and_password(username, password)
-        if("error" in response):
-            return (response['error']['message'])
-        else:
-            return (response['localId'])
+        pass
         
     def createAccount(self, username: str, password: str, email: str) -> bool:
         pass

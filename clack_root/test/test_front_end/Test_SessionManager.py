@@ -1,6 +1,5 @@
 import pytest
-from unittest.mock import MagicMock, patch
-from front_end.Getters import getSessionManager
+from unittest.mock import patch
 from front_end.SessionManager import SessionManager
 from front_end.Session import Session
 def test_signup():
