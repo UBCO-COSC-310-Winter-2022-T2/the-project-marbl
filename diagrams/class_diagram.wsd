@@ -2,7 +2,7 @@
 
 skin rose
 
-title Types - Class Diagram
+title Class Diagram - Client
 
 
 skinparam componentStyle uml2
@@ -11,36 +11,26 @@ Client "1"--"1" UI: Uses
 
 class Message{
     - message : String
-    - date : Date
+    - time : double
     - author : User
     +getMessage() : String
-    +getDate() : String
+    +gettime() : double
     +getAuthor() : String
     +setMessage(String message) : void
 }
 
-class User <<Observer>> {
-    -username : String
-    -password : String
-    -email : String
+class User  {
+    -username : String //unique
     -friends : List<User>
-    -chats : List<chat>
     -onlineStatus : boolean
 
     +getUsername() : String
     +setUsername(String newUsername) : void
-    +verifyPassword(String enteredPassword) : boolean
-    +setPassword(String newPassword) : void
     +setOnlineStatus(boolean status) : void
     +getOnlineStatus() : boolean
-    +notifyFriendsOfYourStatus() : void
     +getFriends() : List<User>
     +addFriend(String username) : boolean
     +removeFriend(User friend) : boolean
-    +updateChat(ChatId myid): void
-
-    +send(String) : void
-    +recieve(String) : void
 }
 
 User "1"--"0..*" User : hasFriends
@@ -87,22 +77,19 @@ Class groupChat {
     +setAdmin(User user) : void
 }
 
-Class chat <<Subject>> {
+Class chat {
     -ChatId : int
-    -Users : List<User>
-    -MessageHistory : List<Message>
     +getMessageHistory() : List<Message>
     +addMessageToHistory(Message msg) : void
     +addUserToChat(username) : void
     +removeUserFromChat(username) : void
-    +notifyAllUsersOfChatUpdate() : void
 }
 
 chat "0..*" -- "1..*" User : Has
 
 chat "1" -- "0..*" Message : Has
 
-groupChat---|> chat : extends
+groupChat-up--|> chat : extends
 
 class commandInterface <<Mediator>> {
     Interact with the system through here by calling the methods,
@@ -116,8 +103,9 @@ class commandInterface <<Mediator>> {
     +createAccount(String username, String password, String email) : boolean
 }
 
-Session "1" -- "1" User : uses
-Session "1" -- "1" chat: uses
+Session  --  User : uses
+Session  --  chat: uses
+Session  --  Message: uses
 
 class UI {
     +Buttons and Labels
