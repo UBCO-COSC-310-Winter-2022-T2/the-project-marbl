@@ -1,0 +1,119 @@
+@startuml
+
+skin rose
+
+title Class diagram - ListenerServer
+
+
+skinparam componentStyle uml2
+
+
+class Message{
+    - message : String
+    - time : double
+    - author : User
+    +getMessage() : String
+    +gettime() : double
+    +getAuthor() : String
+    +setMessage(String message) : void
+}
+
+class User  {
+    -username : String //unique
+    -friends : List<User>
+    -onlineStatus : boolean
+
+    +getUsername() : String
+    +setUsername(String newUsername) : void
+    +setOnlineStatus(boolean status) : void
+    +getOnlineStatus() : boolean
+    +getFriends() : List<User>
+    +addFriend(String username) : boolean
+    +removeFriend(User friend) : boolean
+}
+
+User "1"--"0..*" User : hasFriends
+
+Class groupChat {
+    -admin : User
+    -chatName : String
+    +setchatName(String name) : void
+    +getchatName() : String
+    +getAdmin() : User
+    +setAdmin(User user) : void
+}
+
+Class chat {
+    -ChatId : int
+    +getMessageHistory() : List<Message>
+    +addMessageToHistory(Message msg) : void
+    +addUserToChat(username) : void
+    +removeUserFromChat(username) : void
+}
+
+chat "0..*" -- "1..*" User : Has
+
+chat "1" -- "0..*" Message : Has
+
+groupChat --up-|> chat : extends
+
+Class Server as "ListenerServer" {
+    -myMQTTClientInstance : mqtt.Client 
+    -server_name: String
+    -broker : String
+    -credentials : firebase_admin.credentials.certificate
+    -default_app : firebase_admin app thing
+    -dbref : db.reference //pointer to where to interact with db (e.g. 'marbl/chatroom1')
+    --
+     -start_server() : void 
+    -getMQTTClientInstance() : MQTTClient
+    -sendMessage(String user) : void
+    -addUser(User) : void
+    -start_connection() : bool
+    -end_connection() : bool
+    -subscribe(chat) : bool
+    -publish(chat,msg) : bool
+    -on_disconnect(client,userdata, flags, rc)  : event
+    -on_connect(client,userdata, flags, rc):event
+    ..
+    -on_message(client, userdata, msg) : event //calls corresponding command method
+    
+    -process_command_sendmsg(params) : void
+     -update_db_of_sendmsg(String message, double time, author user) : void
+     
+    -process_command_addfriend(params) : void
+    -update_db_of_added_friend(username user1, username user2) : boolean //success
+    -notify_clients_of_addfriend(params) : void
+       
+    -process_command_retrievemsgsinrange(starttime, endtime, username, chatid) : void
+    -query_db_of_msgs_range(starttime, endtime, username, chatid): List<message>
+    -send_back_msgs_to_user(username, List<message>) : void
+   
+     -process_command_removefriend(params) : void
+    -update_db_of_removed_friend(username user1, username user2) : boolean //success
+     -notify_clients_of_removefriend(params) : void
+   
+   -proccess_command_getuserinfo(params) : void //all of a user's chats, friends, etc.
+   -query_db_of_chats(String username) : List<chat> //chats + msgs
+   -query_db_of_msgs(chat chat, int limit) : List<message> //gets called by above
+   -query_db_of_friends(String username) : List<username, onlinestatus>
+ 
+    --
+    on_message recieves all commands from user,
+    parses their params, and calls the corresponding
+    process_command() method, who will then update
+    the database and send a message through the MQTT
+    connection to notify all users that would be interested
+    that there has been a change on the server/database
+}
+
+
+
+
+
+Server -- Message: uses
+Server -- User : uses
+Server -- chat: uses
+
+
+@enduml
