@@ -1,53 +1,44 @@
+
 class CommandInterface:
     """
     Interact with the system through here by calling the methods,
     this will interact with the internal system methods and classes
     """
+    def __init__(self):
+        from front_end.Getters import getSessionManager
+        self.SM = getSessionManager()
+        pass
     
     def getUsernameOfCurrentlyLoggedInUser(self) -> str:
         pass
     
-    def getCurrentlyLoggedInUser(self) -> User:
+    def getCurrentlyLoggedInUser(self) -> str:
         pass
     
-    def getCurrentChatViewed(self) -> Chat:
+    def getCurrentChatViewed(self) -> str:
         pass
     
-    def setCurrentChatViewed(self, chat: Chat) -> None:
+    def setCurrentChatViewed(self, chat: str) -> None:
         pass
     
-    def Login(self, username: str, password: str) -> bool:
-        pass
-    
-    def Logout(self) -> None:
-        pass
-    
-    def ResetPassword(self, newPassword: str) -> None:
-        pass
-    
-    def SendMessage(self, msg: str) -> None:
-        pass
-    
-    def addUserToChat(self, username: str) -> None:
-        pass
-    
-    def kickUserFromChat(self, username: str) -> None:
-        pass
-    
-    def transferAdminship(self, username: str, chat: Chat) -> None:
-        pass
-    
-    def createChat(self, users: List[User]) -> None:
-        pass
-    
-    def createAccount(self, username: str, password: str, email: str) -> bool:
-        pass
-    
-    def addFriend(self, username: str) -> bool:
-        pass
-    
-    def removeFriend(self, username: str) -> None:
-        pass
-    
-    def getFriends(self) -> List[User]:
-        pass
+    def Login(self, email: str, password: str) -> str:
+        response = self.SM.sign_in_with_email_and_password(email, password)
+        if(type(response) == dict):
+            #error
+            ret = {"success": False, "errorMsg": response["error"]["message"]}
+            return ret
+        else:
+            #success
+            ret = {"success": True, "session": response}
+            return ret
+        
+    def createAccount(self, email: str, password: str) -> bool:
+        response = self.SM.create_user_with_email_and_password(email, password, email)
+        if("error" in response):
+            #error
+            ret = {"success": False, "errorMsg": response["error"]["message"]}
+            return ret
+        else:
+            #success
+            ret = {"success": True}
+            return ret
