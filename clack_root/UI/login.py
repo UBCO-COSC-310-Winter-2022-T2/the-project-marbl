@@ -2,11 +2,13 @@ from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButto
 import sys
 from signup import SignupScreen
 from forgot import ForgotPasswordScreen
+from front_end.Getters import CommandInterface
 
 class LoginWindow(QWidget):
     def __init__(self):
         super().__init__()
-
+        # Set up connection with CommandInterface
+        self.command_interface = CommandInterface()
         # Set up window title and geometry
         self.setWindowTitle('Login to Clack')
         self.setGeometry(100, 100, 300, 150)
@@ -55,6 +57,7 @@ class LoginWindow(QWidget):
         email = self.email_input.text()
         password = self.password_input.text()
         #implement/connect firebase auth login here
+        self.command_interface.login(email, password)
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
