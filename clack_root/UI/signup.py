@@ -4,6 +4,7 @@ import sys
 class SignupScreen(QWidget):
     def __init__(self, login_screen_to_return):
         super().__init__()
+
         #create a link back to login
         self.login_screen_link = login_screen_to_return
 

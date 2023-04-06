@@ -7,7 +7,6 @@ class CommandInterface:
     def __init__(self):
         from front_end.Getters import getSessionManager
         self.SM = getSessionManager()
-        pass
     
     def getUsernameOfCurrentlyLoggedInUser(self) -> str:
         pass
@@ -21,7 +20,7 @@ class CommandInterface:
     def setCurrentChatViewed(self, chat: str) -> None:
         pass
     
-    def Login(self, email: str, password: str) -> str:
+    def login(self, email: str, password: str) -> str:
         response = self.SM.sign_in_with_email_and_password(email, password)
         if(type(response) == dict):
             #error
@@ -32,7 +31,7 @@ class CommandInterface:
             ret = {"success": True, "session": response}
             return ret
         
-    def createAccount(self, email: str, password: str) -> bool:
+    def create_account(self, email: str, password: str) -> bool:
         response = self.SM.create_user_with_email_and_password(email, password, email)
         if("error" in response):
             #error

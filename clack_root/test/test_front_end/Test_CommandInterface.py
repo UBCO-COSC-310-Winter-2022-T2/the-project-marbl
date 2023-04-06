@@ -12,8 +12,8 @@ def test_login():
     
     cmd = getCommandInterface()
     cmd.SM.sign_in_with_email_and_password = mock_func
-    r1 = cmd.Login('valid@valid.com', 'valid')
-    r2 = cmd.Login('invalid', 'invalid')
+    r1 = cmd.login('valid@valid.com', 'valid')
+    r2 = cmd.login('invalid', 'invalid')
 
     assert r1 and r1["success"] == True
     assert r1 and r1["session"] is not None
@@ -33,7 +33,7 @@ def test_register():
     
     cmd = getCommandInterface()
     cmd.SM.create_user_with_email_and_password = mock_func
-    r1 = cmd.createAccount('valid@valid.com', 'valid')
-    r2 = cmd.createAccount('invalid', 'invalid')
+    r1 = cmd.create_account('valid@valid.com', 'valid')
+    r2 = cmd.create_account('invalid', 'invalid')
     assert r1 and r1["success"] == True
     assert r2 and r2["success"] == False
