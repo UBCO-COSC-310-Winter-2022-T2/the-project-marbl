@@ -7,7 +7,7 @@ import pyrebase
 
 
 
-class listener_server:
+class ListenerServer:
   def __init__(self,broker: str, server_name: str):
     #MQTT stuff
     self.client = mqtt.Client(server_name)
