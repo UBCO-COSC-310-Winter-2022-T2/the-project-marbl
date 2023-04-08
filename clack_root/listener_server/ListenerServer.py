@@ -36,25 +36,25 @@ class ListenerServer:
 
   ##methods
   def start_server(self):
-    self.start_connection(self)
-    self.subscribe(self, "marbl/#") #subscribe to all topics
+    self._start_connection(self)
+    self._subscribe(self, "marbl/#") #subscribe to all topics
   
-  def start_connection(self):
+  def _start_connection(self):
         try:
-            self.client.connect(self.broker)
-            self.client.loop_start()
+#            self.client.connect(self.broker)
+#            self.client.loop_start()
             return True
         except:
             return False
 
-  def end_connection(self):
-        self.client.loop_stop()
-        self.client.disconnect()
+  def _end_connection(self):
+#        self.client.loop_stop()
+#        self.client.disconnect()
         return True
 
-  def subscribe(self, topic : str):
+  def _subscribe(self, topic : str):
         try:
-            self.client.subscribe(topic)
+#            self.client.subscribe(topic)
             return True
         except:
             return False
