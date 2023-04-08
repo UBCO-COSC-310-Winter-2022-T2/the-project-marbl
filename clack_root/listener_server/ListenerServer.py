@@ -97,7 +97,8 @@ class ListenerServer:
       case "SENDMSG":
         #parse chatroom from topic (take off the marbl/ part)
         chatroom = topic[6:] 
-        self._process_command_sendmsg(msg_json["author"], msg_json["time"], msg_json["message"], chatroom)
+        del msg_json["command"] #remove command from the rest of the message and pass it on
+        self._process_command_sendmsg(msg_json, chatroom)
       case _:
         print(command + " is not a valid command")
     
@@ -108,9 +109,9 @@ class ListenerServer:
   #  "time" : 1230984.4839205,
   #  "message" : "hello world"}
   
-  def _process_command_sendmsg(self, author : str, time : float, message : str, chatroom : str):
-    print(author + " sent a message in " + chatroom + " at time " + str(time))
-    self._update_db_of_sendmsg(author, time, message, chatroom)
+  def _process_command_sendmsg(self, msg_json, chatroom : str):
+    print(msg_json["author"] + " sent a message in " + chatroom + " at time " + str(msg_json["time"]))
+    self._update_db_of_sendmsg(msg_json, chatroom)
 
-  def _update_db_of_sendmsg(self, author : str, time : float, message : str, chatroom : str):
-    pass
+  def _update_db_of_sendmsg(self, msg_json, chatroom : str):
+    self.db.child("chats").child(chatroom).child("messages").push(msg_json)
