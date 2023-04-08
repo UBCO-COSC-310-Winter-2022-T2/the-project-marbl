@@ -1,4 +1,5 @@
 #from User import User
+import json
 from front_end.User import User
 import time
 import os
@@ -88,10 +89,28 @@ class ListenerServer:
   def _on_message(self, client, userdata, msg):
     topic=msg.topic
     m_decode = str(msg.payload.decode('utf-8','ignore'))
-    print("Received message in topic " +topic+ ": ", m_decode)
+    
+    #print("Received message in topic " +topic+ ": ", m_decode) #for debugging
+    msg_json = json.loads(m_decode)
+    command = msg_json["command"]
+    match command:
+      case "SENDMSG":
+        #parse chatroom from topic (take off the marbl/ part)
+        chatroom = topic[6:] 
+        self._process_command_sendmsg(msg_json["author"], msg_json["time"], msg_json["message"], chatroom)
+      case _:
+        print(command + " is not a valid command")
+    
+  #### received sendmsg command
+  # example json format
+  # {"command" : "SENDMSG",
+  #  "author" : "John",
+  #  "time" : 1230984.4839205,
+  #  "message" : "hello world"}
+  
+  def _process_command_sendmsg(self, author : str, time : float, message : str, chatroom : str):
+    print(author + " sent a message in " + chatroom + " at time " + str(time))
+    self._update_db_of_sendmsg(author, time, message, chatroom)
 
-  def _process_command_sendmsg():
-    pass
-
-  def _update_db_of_sendmsg(msg : str, time : float, author : User):
+  def _update_db_of_sendmsg(self, author : str, time : float, message : str, chatroom : str):
     pass
