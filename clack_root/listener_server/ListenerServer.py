@@ -41,20 +41,20 @@ class ListenerServer:
   
   def _start_connection(self):
         try:
-#            self.client.connect(self.broker)
-#            self.client.loop_start()
+            self.client.connect(self.broker)
+            self.client.loop_start()
             return True
         except:
             return False
 
   def _end_connection(self):
-#        self.client.loop_stop()
-#        self.client.disconnect()
+        self.client.loop_stop()
+        self.client.disconnect()
         return True
 
   def _subscribe(self, topic : str):
         try:
-#            self.client.subscribe(topic)
+            self.client.subscribe(topic)
             return True
         except:
             return False

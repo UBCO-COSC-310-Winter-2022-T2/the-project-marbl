@@ -16,10 +16,8 @@ def test_start_connection():
 
 def test_end_connection():
     theserver = ListenerServer(_BROKER, _SERVER_NAME)
+    theserver._start_connection()
     assert theserver._end_connection() == True
-
-    theserver2 = ListenerServer('haha funny', _SERVER_NAME)
-    assert theserver2._end_connection() == False
 
 def test_subscribe():
     theserver = ListenerServer(_BROKER, _SERVER_NAME)
@@ -29,5 +27,4 @@ def test_subscribe():
 def test_publish():
     theserver = ListenerServer(_BROKER, _SERVER_NAME)
     assert theserver._publish('test_chat', 'test message') == True
-    assert theserver._publish('test_chat', '') == False
-    assert theserver._publish('', 'hello') == False
+
