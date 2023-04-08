@@ -1,4 +1,5 @@
-import front_end.User as User
+#from User import User
+from front_end.User import User
 import time
 import os
 import paho.mqtt.client as mqtt
@@ -15,7 +16,7 @@ class ListenerServer:
     self.client.on_message = self._on_message
     self.client.on_disconnect = self._on_disconnect
     self.client.on_connect = self._on_connect
-    self.client.on_log = self._on_log
+    #self.client.on_log = self._on_log #uncomment for dubug connection
     #firebase stuff
     config = {
         "apiKey": "AIzaSyAT_ILhmjVI1gv9qdWrfsFaxJSt8cvNsSw",
@@ -36,8 +37,8 @@ class ListenerServer:
 
   ##methods
   def start_server(self):
-    self._start_connection(self)
-    self._subscribe(self, "marbl/#") #subscribe to all topics
+    self._start_connection()
+    self._subscribe("marbl/#") #subscribe to all topics
   
   def _start_connection(self):
         try:
@@ -66,26 +67,28 @@ class ListenerServer:
     except:
         return False
         
-  def _on_log(client, userdata, level, buf): #for debugging purposes
+  def _on_log(self, client, userdata, level, buf): #for debugging purposes
     print("long: "+buf)
 
-  def _on_connect(client,userdata, flags, rc):
+  def _on_connect(self, client,userdata, flags, rc):
     if rc == 0:
         print("connected OK")
     else:
         print("Bad connection. Returned code =",rc)
 
-  def _on_disconnect(client,userdata, flags, rc = 0):
+  def _on_disconnect(self, client,userdata, flags, rc = 0):
     print("Disconnected result code " + str(rc))
   
-    # on_message recieves all commands from user,
+    # on_message receives all commands from user,
     # parses their params, and calls the corresponding
     # process_command() method, who will then update
     # the database and send a message through the MQTT
     # connection to notify all users that would be interested
     # that there has been a change on the server/database
-  def _on_message(client, userdata, msg):
-    pass
+  def _on_message(self, client, userdata, msg):
+    topic=msg.topic
+    m_decode = str(msg.payload.decode('utf-8','ignore'))
+    print("Received message in topic " +topic+ ": ", m_decode)
 
   def _process_command_sendmsg():
     pass
