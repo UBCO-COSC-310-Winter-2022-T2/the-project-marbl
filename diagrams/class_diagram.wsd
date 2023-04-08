@@ -2,7 +2,7 @@
 
 skin rose
 
-title Types - Class Diagram
+title Class Diagram - Client
 
 
 skinparam componentStyle uml2
@@ -11,52 +11,62 @@ Client "1"--"1" UI: Uses
 
 class Message{
     - message : String
-    - date : Date
+    - time : double
     - author : User
     +getMessage() : String
-    +getDate() : String
+    +gettime() : double
     +getAuthor() : String
     +setMessage(String message) : void
 }
 
-class User <<Observer>> {
-    -username : String
-    -password : String
-    -email : String
+class User  {
+    -username : String //unique
     -friends : List<User>
-    -chats : List<chat>
     -onlineStatus : boolean
 
     +getUsername() : String
     +setUsername(String newUsername) : void
-    +verifyPassword(String enteredPassword) : boolean
-    +setPassword(String newPassword) : void
     +setOnlineStatus(boolean status) : void
     +getOnlineStatus() : boolean
-    +notifyFriendsOfYourStatus() : void
     +getFriends() : List<User>
     +addFriend(String username) : boolean
     +removeFriend(User friend) : boolean
-    +updateChat(ChatId myid): void
-
-    +send(String) : void
-    +recieve(String) : void
 }
 
 User "1"--"0..*" User : hasFriends
 
-Class MQTTClient <<Singleton>> {
+Class MQTTClient <<(S,red) Singleton>> {
+    -myMQTTClientInstance : mqtt.Client 
+    -client_name : String
+    -broker : String
+    --
+    -MQTTClient() : new MQTTClient
+    +getMQTTClientInstance() : MQTTClient
     +sendMessage(String user) : void
     +addUser(User) : void
     +start_connection() : bool
     +end_connection() : bool
     +subscribe(chat) : bool
-    +publish(chat,msg) : bool
-    +on_message(client, userdata, msg) : event
-    +on_disconnect(client,userdata, flags, rc)  : event
-    +on_connect(client,userdata, flags, rc):event
+    -publish(chat,msg) : bool
+    -on_disconnect(client,userdata, flags, rc)  : event
+    -on_connect(client,userdata, flags, rc):event
+    
+    -on_message(client, userdata, msg) : event 
+    -process_command_recvmsg(params) : void
+    -process_command_addedfriend(params) : void
+    -process_command_yougettheidea(params) : void
+    --
+    on_message recieves all commands from server (RECVMSG, 
+    ADDEDFRIEND,ADDEDUSERTOCHAT, etc) and will parse the
+    command and send it to the corresponding method with
+    the rest of the parameters in the message (like for
+    ADDEDFRIEND the parameters would be like: originalUser,
+     usernameOfFriendAdded, time sorta thing) and that method
+     will then update the rest of the variables and UI in the client 
 }
 
+MQTTClient "1" -[#blue]-> "1" Session : updates
+UI "1" <-[#blue]- "1" MQTTClient : notifies of updates
 
 Class groupChat {
     -admin : User
@@ -67,22 +77,19 @@ Class groupChat {
     +setAdmin(User user) : void
 }
 
-Class chat <<Subject>> {
+Class chat {
     -ChatId : int
-    -Users : List<User>
-    -MessageHistory : List<Message>
     +getMessageHistory() : List<Message>
     +addMessageToHistory(Message msg) : void
     +addUserToChat(username) : void
     +removeUserFromChat(username) : void
-    +notifyAllUsersOfChatUpdate() : void
 }
 
 chat "0..*" -- "1..*" User : Has
 
 chat "1" -- "0..*" Message : Has
 
-groupChat---|> chat : extends
+groupChat-up--|> chat : extends
 
 class commandInterface <<Mediator>> {
     Interact with the system through here by calling the methods,
@@ -96,19 +103,22 @@ class commandInterface <<Mediator>> {
     +createAccount(String username, String password, String email) : boolean
 }
 
-Session "1" -- "1" User : uses
-Session "1" -- "1" chat: uses
+Session  --  User : uses
+Session  --  chat: uses
+Session  --  Message: uses
 
 class UI {
     +Buttons and Labels
 }
 
 class Session{
-    +idToken : string
-    +expiry : Date
-    +refreshToken : string
-    +isValid : boolean
-    +email : string
+    -chats : List<chat> // all messages currently saved by user, \n\t\t\t\twill be dropped when session is closed\n\t\t\t\tand re-populated as user views chats, \n\t\t\t\tsorted on time
+    -currentLoggedInUser : User
+    -idToken : string
+    -expiry : Date
+    -refreshToken : string
+    -isValid : boolean
+    -email : string
     +getUsernameOfCurrentlyLoggedInUser() : String
     +getCurrentlyLoggedInUser() : User
     +ResetPassword(String newPassword) : void
@@ -123,15 +133,19 @@ class Session{
     +Logout() : void
 }
 
-class SessionManager <<Singleton>>{
-    +idToken : string
-    isLoggedIn : boolean
+class SessionManager <<(S,red) Singleton>>{
+    -idToken : string
+    -isLoggedIn : boolean
+    -mySessionManagerInstance : SessionManager
+    -SessionManager() : new SessionManager
+    +getSessionManagerInstance() : SessionManager
     +getExistingSession() : FirebaseSession
     +sign_in_with_email_and_password(String email, String password)
     +create_user_with_email_and_password(String email, String password)
 }
 
-Session "1" -- "1" MQTTClient : uses
+
+Session "1" --> "1" MQTTClient : uses
 Session "1" -- "1" SessionManager : <<creates>>
 UI "1" -- "1" commandInterface : uses
 commandInterface "1" -- "1" SessionManager
