@@ -1,3 +1,5 @@
+#for retrieving and creating singleton instances
+
 from front_end.MQTTClient import MQTTClient
 from front_end.SessionManager import SessionManager
 from front_end.CommandInterface import CommandInterface

@@ -10,7 +10,7 @@ setup(
     # ],
     entry_points={
         'console_scripts': [
-            'start=clack_root.back_end:main'
+            'start=UI.main:main',
         ]
     }
 )

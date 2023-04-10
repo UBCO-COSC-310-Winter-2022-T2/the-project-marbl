@@ -26,7 +26,7 @@ class SessionManager:
       return json.loads(e.strerror)
     #session expires every hour, refresh with user = auth.refresh(user['refreshToken'])
 
-  def create_user_with_email_and_password(self, email, password):
+  def create_user_with_email_and_password(self, email, password, username, first_name, last_name):
     try:
       user = self.auth.create_user_with_email_and_password(email, password)
       return user

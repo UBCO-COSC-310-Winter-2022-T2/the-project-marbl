@@ -32,8 +32,8 @@ class CommandInterface:
             ret = {"success": True, "session": response}
             return ret
         
-    def createAccount(self, email: str, password: str) -> bool:
-        response = self.SM.create_user_with_email_and_password(email, password, email)
+    def createAccount(self, email: str, password: str, username: str, first_name: str, last_name: str) -> bool:
+        response = self.SM.create_user_with_email_and_password(email, password, username, first_name, last_name)
         if("error" in response):
             #error
             ret = {"success": False, "errorMsg": response["error"]["message"]}

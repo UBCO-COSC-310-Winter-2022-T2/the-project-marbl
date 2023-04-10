@@ -23,7 +23,6 @@ front_end/User.py
 front_end/__init__.py
 front_end/authtest.py
 listener_server/ListenerServer.py
-listener_server/User.py
 listener_server/__init__.py
 listener_server/listener_server_main.py
 test/__init__.py
