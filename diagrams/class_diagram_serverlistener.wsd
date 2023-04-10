@@ -61,18 +61,14 @@ Class Server as "ListenerServer" {
     -myMQTTClientInstance : mqtt.Client 
     -server_name: String
     -broker : String
-    -credentials : firebase_admin.credentials.certificate
-    -default_app : firebase_admin app thing
-    -dbref : db.reference //pointer to where to interact with db (e.g. 'marbl/chatroom1')
+    -db : Database 
     --
      -start_server() : void 
     -getMQTTClientInstance() : MQTTClient
-    -sendMessage(String user) : void
+    -publish(String topic, String msg) : void
     -addUser(User) : void
     -start_connection() : bool
     -end_connection() : bool
-    -subscribe(chat) : bool
-    -publish(chat,msg) : bool
     -on_disconnect(client,userdata, flags, rc)  : event
     -on_connect(client,userdata, flags, rc):event
     ..
