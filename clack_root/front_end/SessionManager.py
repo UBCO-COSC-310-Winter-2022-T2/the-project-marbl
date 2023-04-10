@@ -18,8 +18,10 @@ class SessionManager:
     self.auth = auth
     self.database = database
     self.existingSession = None
+
   def get_existing_session(self):
     return self.existingSession
+  
   def sign_in_with_email_and_password(self, email, password): #session expires every hour, refresh with user = auth.refresh(user['refreshToken'])
     try:
       response = self.auth.sign_in_with_email_and_password(email, password)
@@ -28,7 +30,26 @@ class SessionManager:
     except Exception as e:
       return json.loads(e.strerror)
     
-  def save_user_data(self, username, first_name, last_name, UID):
+  def create_account(self, email, password, username, first_name, last_name):
+    user = {}
+
+    #try to save data about user (checks if username already exists)
+    try:
+      self.save_user_data(username, first_name, last_name)
+    except Exception as e:
+      print("DATABASE ERROR:", e)
+      self.clear_user_data(username)
+      return {"error": {"message": str(e)}}
+    
+    #try to create account
+    try:
+      user = self.auth.create_user_with_email_and_password(email, password)
+      return user
+    except Exception as e:
+      self.clear_user_data(username)
+      return json.loads(e.strerror)
+  
+  def save_user_data(self, username, first_name, last_name):
     if(len(username) < 3):
         raise Exception("Username must be at least 3 characters long. This really should not happen!")
     if(len(first_name) < 1):
@@ -42,18 +63,17 @@ class SessionManager:
     "username": username
     }
     # Set the UID key in the database to the user data
-    return database.child("users").child(UID).set(data)
-    
-  def create_account(self, email, password, username, first_name, last_name):
-    user = {}
-    try:
-      user = self.auth.create_user_with_email_and_password(email, password)
-    except Exception as e:
-      return json.loads(e.strerror)
-    
-    try:
-      self.save_user_data(username, first_name, last_name, user['localId'])
-      return user
-    except Exception as e:
-      print("DATABASE ERROR:", e)
-      return {"error": {"message": "Error saving user data"}}
+    if(self.get_username_exists(username)):
+      raise Exception("Username exists already :(")
+    else:
+      return database.child("users").child(username).set(data)
+  
+  def clear_user_data(self,username):
+    if(self.get_username_exists(username)):
+      database.child("users").child(username).set(None)
+  
+  def get_username_exists(self, username):
+    if(database.child('users').child(username).get().val()):
+      return True
+    else:
+      return False

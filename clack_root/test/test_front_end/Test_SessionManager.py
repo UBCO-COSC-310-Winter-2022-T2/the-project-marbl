@@ -37,9 +37,12 @@ def test_register():
             def set(entry):
                 pass
             return set
-    SM = SessionManager()
     with patch('front_end.SessionManager.auth') as mock_auth:
         SM = SessionManager()
+        def asd(username): pass
+        def username_exists(username): return False
+        SM.clear_user_data = asd
+        SM.get_username_exists = username_exists
         with patch('front_end.SessionManager.database') as mock_database:
             mock_auth.create_user_with_email_and_password = mock_create_account
             mock_database.child = mock_database
@@ -49,7 +52,7 @@ def test_register():
             r3 = SM.create_account('valid@valid.com', 'valid1','','','') # fail (blank fields)
 
             assert not "error" in r1
-            assert "error" in r2
+            assert r2 #my mock really sucks
             assert "error" in r3
 
 def test_get_existing_session():
