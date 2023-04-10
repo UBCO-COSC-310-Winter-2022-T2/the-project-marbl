@@ -12,8 +12,8 @@ def test_login():
     
     cmd = getCommandInterface()
     cmd.SM.sign_in_with_email_and_password = mock_func
-    r1 = cmd.Login('valid@valid.com', 'valid')
-    r2 = cmd.Login('invalid', 'invalid')
+    r1 = cmd.login('valid@valid.com', 'valid')
+    r2 = cmd.login('invalid', 'invalid')
 
     assert r1 and r1["success"] == True
     assert r1 and r1["session"] is not None
@@ -32,13 +32,13 @@ def test_register():
             return example_fail_message
     
     cmd = getCommandInterface()
-    cmd.SM.create_user_with_email_and_password = mock_func
-    r1 = cmd.createAccount('valid@valid.com', 'valid1', 'validuser', 'validfirst', 'validlast') # success
-    r2 = cmd.createAccount('invalid', 'invalid', 'validuser', 'validfirst', 'validlast') # fail (invalid email)
-    r3 = cmd.createAccount('valid@valid.com', 'valid1','','','') # fail (blank fields)
-    r4 = cmd.createAccount('valid@valid.com', 'valid1','validuser','validfirst','') # fail (last name must be 1+ letters)
-    r5 = cmd.createAccount('valid@valid.com', 'valid1','validuser','','validlast') # fail (first name must be 1+ letters)
-    r6 = cmd.createAccount('valid@valid.com', 'valid1','a','validfirst','validlast') # fail (username must be 3+ letters)
+    cmd.SM.create_account = mock_func
+    r1 = cmd.create_account('valid@valid.com', 'valid1', 'validuser', 'validfirst', 'validlast') # success
+    r2 = cmd.create_account('invalid', 'invalid', 'validuser', 'validfirst', 'validlast') # fail (invalid email)
+    r3 = cmd.create_account('valid@valid.com', 'valid1','','','') # fail (blank fields)
+    r4 = cmd.create_account('valid@valid.com', 'valid1','validuser','validfirst','') # fail (last name must be 1+ letters)
+    r5 = cmd.create_account('valid@valid.com', 'valid1','validuser','','validlast') # fail (first name must be 1+ letters)
+    r6 = cmd.create_account('valid@valid.com', 'valid1','a','validfirst','validlast') # fail (username must be 3+ letters)
     assert r1 and r1["success"] == True
     assert r2 and r2["success"] == False
     assert r3 and r3["success"] == False
