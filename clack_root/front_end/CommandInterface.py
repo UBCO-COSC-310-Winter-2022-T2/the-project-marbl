@@ -32,7 +32,7 @@ class CommandInterface:
             return ret
         
     def create_account(self, email: str, password: str) -> bool:
-        response = self.SM.create_user_with_email_and_password(email, password, email)
+        response = self.SM.create_user_with_email_and_password(email, password)
         if("error" in response):
             #error
             ret = {"success": False, "errorMsg": response["error"]["message"]}
