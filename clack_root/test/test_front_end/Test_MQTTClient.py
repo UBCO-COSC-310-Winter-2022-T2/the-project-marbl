@@ -7,7 +7,7 @@ def test_start_connection():
     # test that connection is successful
     assert client.start_connection() == True
 
-    client = MQTTClient('notvalid')
+    client2 = MQTTClient('notvalid')
     assert client2.start_connection() == False
 
 def test_end_connection():
