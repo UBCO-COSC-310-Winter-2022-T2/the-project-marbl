@@ -1,11 +1,13 @@
 from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButton, QVBoxLayout
+from front_end.Getters import getCommandInterface
 import sys
-
-from clack_root.UI.login import LoginWindow
 
 class SignupScreen(QWidget):
     def __init__(self, login_screen_to_return):
         super().__init__()
+
+        #get commandinterface object
+        self.command_interface = getCommandInterface()
         #create a link back to login
         self.login_screen_link = login_screen_to_return
 
@@ -25,6 +27,7 @@ class SignupScreen(QWidget):
         self.email_input = QLineEdit()
         self.password_label = QLabel('Password:')
         self.password_input = QLineEdit()
+        self.error_message = QLabel()
         self.login_button = QPushButton('Login instead')
         self.create_an_account_button = QPushButton('Create an Account')
 
@@ -41,6 +44,7 @@ class SignupScreen(QWidget):
         layout.addWidget(self.email_input)
         layout.addWidget(self.password_label)
         layout.addWidget(self.password_input)
+        layout.addWidget(self.error_message)
         layout.addWidget(self.create_an_account_button)
         layout.addWidget(self.login_button)
         self.setLayout(layout)
@@ -49,8 +53,9 @@ class SignupScreen(QWidget):
         self.login_button.clicked.connect(self.return_login)
         self.create_an_account_button.clicked.connect(self.create_an_account)
 
-    def return_login(self):
+    def return_login(self,msg):
         self.hide()
+        self.login_screen_link.set_message(msg)
         self.login_screen_link.show_login_screen()
 
     def create_an_account(self):
@@ -59,7 +64,16 @@ class SignupScreen(QWidget):
         username = self.username_input.text()
         email = self.email_input.text()
         password = self.password_input.text()
-        #implement/connect firebase auth signup here
+        result = self.command_interface.create_account(email, password, username, first_name, last_name)
+        print(result)
+        success = result["success"]
+        if(not success):
+            self.set_message(result["error"]["message"])
+        else:
+            self.return_login("Registered '" + email + "' successfully")
+    
+    def set_message(self,message):
+        self.error_message.setText(message)
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

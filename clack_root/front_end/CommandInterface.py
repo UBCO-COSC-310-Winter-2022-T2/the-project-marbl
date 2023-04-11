@@ -7,7 +7,6 @@ class CommandInterface:
     def __init__(self):
         from front_end.Getters import getSessionManager
         self.SM = getSessionManager()
-        pass
     
     def getUsernameOfCurrentlyLoggedInUser(self) -> str:
         pass
@@ -25,7 +24,7 @@ class CommandInterface:
         response = self.SM.sign_in_with_email_and_password(email, password)
         if(type(response) == dict):
             #error
-            ret = {"success": False, "errorMsg": response["error"]["message"]}
+            ret = {"success": False, "error": response["error"]}
             return ret
         else:
             #success

@@ -1,11 +1,11 @@
 from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButton, QVBoxLayout
+from front_end.Getters import getCommandInterface
 import sys
-
-from clack_root.UI.login import LoginWindow
 
 class ForgotPasswordScreen(QWidget):
     def __init__(self, login_screen_to_return):
         super().__init__()
+        self.command_interface = getCommandInterface()
         #create link to login screen
         self.login_screen_link = login_screen_to_return
 
@@ -18,6 +18,7 @@ class ForgotPasswordScreen(QWidget):
         self.email_label = QLabel('Email:')
         self.email_input = QLineEdit()
         self.send_button = QPushButton('Send Email')
+        self.error_message = QLabel()
         self.login_button = QPushButton('Login')
 
         # Set up layout
@@ -26,6 +27,7 @@ class ForgotPasswordScreen(QWidget):
         layout.addWidget(self.email_label)
         layout.addWidget(self.email_input)
         layout.addWidget(self.send_button)
+        layout.addWidget(self.error_message)
         layout.addWidget(self.login_button)
         self.setLayout(layout)
 
@@ -39,7 +41,15 @@ class ForgotPasswordScreen(QWidget):
 
     def send_email(self):
         email = self.email_input.text()
-        #implement/connect firebase auth send password reset email here
+        result = self.command_interface.forgot_password(email)
+        if("error" in result):
+            self.set_message(result["error"]["message"])
+        else:
+            self.set_message("Email has been sent!")
+
+    def set_message(self,msg):
+        self.error_message.setText(msg)
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
