@@ -29,6 +29,14 @@ class SessionManager:
       return self.existingSession
     except Exception as e:
       return json.loads(e.strerror)
+  
+  def forgot_password(self, email):
+    try:
+      response = self.auth.send_password_reset_email(email)
+      response["success"] = True
+      return response
+    except Exception as e:
+      return json.loads(e.strerror)
     
   def create_account(self, email, password, username, first_name, last_name):
     user = {}
