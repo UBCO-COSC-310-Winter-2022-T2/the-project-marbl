@@ -4,3 +4,7 @@ typing_extensions
 paho-mqtt
 PyQt5
 pyrebase4
+pip install --upgrade pip wheel setuptools requests
+pip install -U pycryptodome
+pip install collections --upgrade
+pip install -U requests_toolbelt
