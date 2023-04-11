@@ -31,7 +31,7 @@ jobs:
         cd clack_root
         python -m pip install --upgrade pip
         pip install flake8 pytest
-        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+        pip install -r requirements.txt
         pip install -e .
         pip install pytest
         pip install --upgrade pip wheel setuptools requests
