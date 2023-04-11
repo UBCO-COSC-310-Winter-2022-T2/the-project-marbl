@@ -31,11 +31,21 @@ class CommandInterface:
             ret = {"success": True, "session": response}
             return ret
         
-    def create_account(self, email: str, password: str) -> bool:
-        response = self.SM.create_user_with_email_and_password(email, password)
+    def create_account(self, email: str, password: str, username: str, first_name: str, last_name: str) -> bool:
+
+        if(len(username) < 3):
+            return {"success": False, "error": {"message": "Username must be at least 3 characters long"}}
+        if(len(first_name) < 1):
+            return {"success": False, "error": {"message": "First name must be at least 1 character long"}}
+        if(len(last_name) < 1):
+            return {"success": False, "error": {"message": "Last name must be at least 1 character long"}}
+        
+        
+        response = self.SM.create_account(email, password, username, first_name, last_name)
+
         if("error" in response):
             #error
-            ret = {"success": False, "errorMsg": response["error"]["message"]}
+            ret = {"success": False, "error": response["error"]}
             return ret
         else:
             #success
