@@ -47,6 +47,8 @@ jobs:
         cd clack_root
         pip install pytest pytest-cov
         pytest -m pytest --doctest-modules --junitxml=junit/test-results.xml --cov=com --cov-report=xml --cov-report=html
+    - name: push results
+      run: |
         git add .
         git commit -m "the thing!"
         git push --set-upstream origin github-actions-output-thing
