@@ -42,8 +42,12 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: run setup.py and Test with pytest
       run: |
+        git checkout -b github-actions-output-thing
         python clack_root/setup.py install
         cd clack_root
         pip install pytest pytest-cov
         pytest -m pytest --doctest-modules --junitxml=junit/test-results.xml --cov=com --cov-report=xml --cov-report=html
+        git add .
+        git commit -m "the thing!"
+        git push --set-upstream origin github-actions-output-thing
         
