@@ -41,5 +41,5 @@ jobs:
         python clack_root/setup.py install
     - name: Test with pytest
       run: |
-        python -m pytest --import-mode=append clack_root/test/
+        pytest
         
