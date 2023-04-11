@@ -54,7 +54,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: pytest-results
-        path: junit/test-results.xml
+        path: D:\a\the-project-marbl\the-project-marbl\clack_root\junit\test-results.xml
       # Use always() to always run this step to publish test results when there are test failures
       if: ${{ always() }}
         
