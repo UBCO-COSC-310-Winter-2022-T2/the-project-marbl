@@ -52,3 +52,5 @@ class CommandInterface:
             #success
             ret = {"success": True}
             return ret
+    def forgot_password(self,email:str):
+        pass
