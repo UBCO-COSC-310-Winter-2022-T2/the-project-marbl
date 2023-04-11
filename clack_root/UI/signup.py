@@ -55,7 +55,8 @@ class SignupScreen(QWidget):
 
     def return_login(self,msg):
         self.hide()
-        self.login_screen_link.set_message(msg)
+        if(msg):
+            self.login_screen_link.set_message(msg)
         self.login_screen_link.show_login_screen()
 
     def create_an_account(self):

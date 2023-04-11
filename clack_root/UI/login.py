@@ -63,14 +63,14 @@ class LoginWindow(QWidget):
         success = result["success"]
         if(not success):
             print(result)
-            self.set_message(result["error"]["message"])
+            self.set_message(str(result["error"]["message"]))
         else:
             #move to main screen
             self.set_message("wooo you logged in! congrats")
             pass
         
     def set_message(self,message):
-        self.error_message.setText(message)
+        self.error_message.setText(str(message))
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
