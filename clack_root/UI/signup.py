@@ -53,8 +53,9 @@ class SignupScreen(QWidget):
         self.login_button.clicked.connect(self.return_login)
         self.create_an_account_button.clicked.connect(self.create_an_account)
 
-    def return_login(self):
+    def return_login(self,msg):
         self.hide()
+        self.login_screen_link.set_message(msg)
         self.login_screen_link.show_login_screen()
 
     def create_an_account(self):
@@ -63,14 +64,15 @@ class SignupScreen(QWidget):
         username = self.username_input.text()
         email = self.email_input.text()
         password = self.password_input.text()
-        result = self.command_interface.create_account(email, password)
+        result = self.command_interface.create_account(email, password, username, first_name, last_name)
+        print(result)
         success = result["success"]
         if(not success):
-            self.set_error_message(result["errorMsg"])
+            self.set_message(result["error"]["message"])
         else:
-            self.return_login()
+            self.return_login("Registered '" + email + "' successfully")
     
-    def set_error_message(self,message):
+    def set_message(self,message):
         self.error_message.setText(message)
 
 if __name__ == '__main__':

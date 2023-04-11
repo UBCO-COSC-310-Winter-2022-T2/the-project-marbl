@@ -25,17 +25,6 @@ front_end/authtest.py
 listener_server/ListenerServer.py
 listener_server/__init__.py
 listener_server/listener_server_main.py
-front_end/Chat.py
-front_end/CommandInterface.py
-front_end/Getters.py
-front_end/GroupChat.py
-front_end/MQTTClient.py
-front_end/Message.py
-front_end/Session.py
-front_end/SessionManager.py
-front_end/User.py
-front_end/__init__.py
-front_end/authtest.py
 test/__init__.py
 test/test.py
 test/test_front_end/Test_CommandInterface.py
