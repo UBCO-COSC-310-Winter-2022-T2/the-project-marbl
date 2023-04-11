@@ -33,7 +33,6 @@ jobs:
         pip install pytest
         pip install --upgrade pip wheel setuptools requests
         pip install -U pycryptodome
-        pip install collections --upgrade
         pip install -U requests_toolbelt
     - name: Lint with flake8
       run: |
