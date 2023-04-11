@@ -22,6 +22,7 @@ class Message{
 class User  {
     -username : String //unique
     -friends : List<User>
+    -chats : List<chat>
     -onlineStatus : boolean
 
     +getUsername() : String
