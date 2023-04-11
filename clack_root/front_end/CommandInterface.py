@@ -53,4 +53,12 @@ class CommandInterface:
             ret = {"success": True}
             return ret
     def forgot_password(self,email:str):
-        pass
+        response = self.SM.forgot_password(email)
+        if("error" in response):
+            #error
+            ret = {"success": False, "error": response["error"]}
+            return ret
+        else:
+            #success
+            ret = {"success": True}
+            return ret
