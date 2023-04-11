@@ -23,11 +23,11 @@ def test_add_remove_friends():
     user1 = User('gamer', 'password123', 'test@test.com')
     user2 = User('janet', 'password456', 'gamee@gamee.com')
 
-    assert user1.add_friend('janet')
-    assert user1.get_friends() == ['janet']
+    assert user1.add_friend(user1)
+    assert user1.get_friends() == [user1]
 
-    assert user1.remove_friend('janet')
-    assert user1.get_friends() == []
+    assert user1.remove_friend(user1)
+    assert len(user1.get_friends()) ==0
 
 def test_chat_methods():
     # Test the methods of a User instance

@@ -1,45 +1,60 @@
+
+from typing import Self
+from front_end.Chat import Chat
+
+
 class User:
-    @staticmethod
-    def find_user_by_username(username: str):
-        pass
 
     def __init__(self, username: str, password: str, email: str):
         self._username = username
         self._password = password
         self._email = email
-        self._friends = []
-        self._chats = []
+        self._friends : UserList = []
+        self._chats : Chat = []
         self._onlineStatus = False
 
     def get_username(self) -> str:
-        pass
+        return self._username
 
     def set_username(self, new_username: str) -> None:
-        pass
+        self._username = new_username
 
     def verify_password(self, entered_password: str) -> bool:
-        pass
+         return  self._password == entered_password
 
     def set_password(self, new_password: str) -> None:
-        pass
+        self._password = new_password
 
     def set_online_status(self, status: bool) -> None:
-        pass
+        self._onlineStatus = status
 
     def get_online_status(self) -> bool:
-        pass
-
-    def notify_friends_of_your_status(self) -> None:
-        pass
-
+        return self._onlineStatus
+ 
     def get_friends(self) -> list:
-        pass
+        return self._friends
 
-    def add_friend(self, username: str) -> bool:
-        pass
-
-    def remove_friend(self, friend) -> bool:
-        pass
+    def add_friend(self, user : Self) -> bool:
+        for frnd in self._friends:
+            usr : User = frnd
+            if(usr.get_username() == self._username):
+                return False
+            if(usr.get_username() == user.get_username()):
+                return False
+        self._friends.append(user)
+        return True
+            
+        
+    def remove_friend(self, user :  Self) -> bool:
+         for frnd in self._friends:
+            usr : User = frnd
+            if(usr.get_username() == self._username):
+                return False
+            if(usr.get_username() == user.get_username()):
+                self._friends.remove(user)
+                return True
+         
+         return False
 
     def update_chat(self) -> None:
         pass
@@ -56,3 +71,36 @@ class User:
     def receive(self, chat, message) -> None:
         pass
 
+
+class UserList(list):
+    
+    def __init__(self, iterable=None):
+        """Override initializer which can accept iterable"""
+        super(UserList, self).__init__()
+        if iterable:
+            for item in iterable:
+                self.append(item)
+
+    def append(self, item):
+        if isinstance(item, User):
+            super(UserList, self).append(item)
+        else:
+            raise ValueError('Type User only')
+
+    def insert(self, index, item):
+        if isinstance(item, User):
+            super(UserList, self).insert(index, item)
+        else:
+            raise ValueError('Type User only')
+
+    def __add__(self, item):
+        if isinstance(item, User):
+            super(UserList, self).__add__(item)
+        else:
+            raise ValueError('Type User only')
+
+    def __iadd__(self, item):
+        if isinstance(item, User):
+            super(UserList, self).__iadd__(item)
+        else:
+            raise ValueError('Type User only')
