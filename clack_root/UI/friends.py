@@ -1,6 +1,7 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QListWidget, QListWidgetItem, QVBoxLayout, QPushButton, QHBoxLayout, QLineEdit
 from chat import ChatScreen
+from functools import partial
 
 class FriendsWindow(QWidget):
 	def __init__(self):
@@ -41,7 +42,7 @@ class FriendsWindow(QWidget):
 		num_friends = 0 #counter to fill the list
 		for friend in friends:
 			friend_button = QPushButton(friend["username"] + "(" + friend["status"] + ")", self)
-			friend_button.clicked.connect(lambda: self.open_chat_window(friend["username"]))
+			friend_button.clicked.connect(partial(self.open_chat_window, friend["username"]))
 			#to adjust variables/fix errors, you'll most probably need to edit the above line
 			self.friends_list.addItem(QListWidgetItem())
 			self.friends_list.setItemWidget(self.friends_list.item(num_friends), friend_button)
@@ -53,7 +54,7 @@ class FriendsWindow(QWidget):
 		group_chats = []
 		for group_chat in group_chats:
 			group_chat_button = QPushButton(group_chat.name, self)
-			group_chat_button.clicked.connect(lambda: self.open_chat_window(group_chat.name))
+			group_chat_button.clicked.connect(partial(self.open_chat_window, group_chat["name"]))
 			self.group_chats_list.addItem(QListWidgetItem())
 			self.group_chats_list.setItemWidget(self.group_chats_list.item(num_group_chats), group_chat_button)
 			num_group_chats = num_group_chats+1
