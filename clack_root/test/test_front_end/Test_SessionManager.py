@@ -71,3 +71,18 @@ def test_get_existing_session():
         
         SM.sign_in_with_email_and_password('valid@valid.com', 'valid')
         assert SM.get_existing_session() != None
+
+def test_forgot_password():
+    example_success_message = {'localId': 'mB2KNYMvBzbwagrk35P9vUBTmPd2'}
+    example_fail_message = {'error': {'code': 400, 'errors': [{'domain': 'global', 'message': 'EMAIL_EXISTS', 'reason': 'invalid'}], 'message': 'EMAIL_EXISTS'}}
+    def mock_send_password_reset_email(email):
+        if(email == 'valid@valid.com'):
+            return example_success_message
+        else:
+            return example_fail_message
+    
+    SM = SessionManager()
+    SM.forgot_password = mock_send_password_reset_email
+
+    assert not "error" in SM.forgot_password('valid@valid.com')
+    assert "error" in SM.forgot_password('invalid')

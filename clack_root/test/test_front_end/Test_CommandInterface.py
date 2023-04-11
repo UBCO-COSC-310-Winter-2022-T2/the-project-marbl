@@ -45,3 +45,21 @@ def test_register():
     assert r4 and r4["success"] == False
     assert r5 and r5["success"] == False
     assert r6 and r6["success"] == False
+
+
+def test_forgot_password():
+    cmd = getCommandInterface()
+
+    def mock_func(email):
+        if(email == 'valid@valid.com'):
+            return {"success": True}
+        else:
+            return {"success": False, "error": {"message": "EMAIL_NOT_FOUND"}}
+
+    cmd.SM.forgot_password = mock_func
+    
+    r1 = cmd.forgot_password('valid@valid.com')
+    assert r1 and r1["success"] == True
+
+    r2 = cmd.forgot_password('invalid')
+    assert r2 and r2["success"] == False
