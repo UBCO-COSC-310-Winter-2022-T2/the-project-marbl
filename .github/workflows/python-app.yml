@@ -30,7 +30,6 @@ jobs:
       run: |
         cd clack_root
         python -m pip install --upgrade pip
-        pip install bootstrap-py
         pip install flake8 pytest
         pip install -r requirements.txt
         pip install -e .
@@ -51,7 +50,7 @@ jobs:
         pip install pytest pytest-cov
     - name: Test with pytest
       run: |
-        python -m pytest test --doctest-modules --junitxml=junit/test-results.xml --cov=com --cov-report=xml --cov-report=html
+        python -m pytest clack_root/test --doctest-modules --junitxml=junit/test-results.xml --cov=com --cov-report=xml --cov-report=html
     - name: Upload pytest test results
       uses: actions/upload-artifact@v3
       with:
