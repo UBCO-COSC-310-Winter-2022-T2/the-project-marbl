@@ -47,7 +47,7 @@ jobs:
     - name: run setup.py
       run: |
         python clack_root/setup.py install
-        cd clack_root
+        cd ..
         pip install pytest pytest-cov
     - name: Test with pytest
       run: |
