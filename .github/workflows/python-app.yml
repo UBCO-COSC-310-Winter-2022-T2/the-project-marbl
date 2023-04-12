@@ -11,11 +11,14 @@ on:
 
 permissions:
   contents: read
+  issues: read
+  checks: write
+  pull-requests: write
 
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
     - uses: actions/checkout@v3
@@ -28,18 +31,31 @@ jobs:
         cd clack_root
         python -m pip install --upgrade pip
         pip install flake8 pytest
-        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+        pip install -r requirements.txt
         pip install -e .
+        pip install pytest
+        pip install --upgrade pip wheel setuptools requests
+        pip install -U pycryptodome
+        pip install collections --upgrade
+        pip install -U requests_toolbelt
     - name: Lint with flake8
       run: |
         # stop the build if there are Python syntax errors or undefined names
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-    - name: running setup.py
+    - name: run setup.py
       run: |
         python clack_root/setup.py install
+        pip install pytest pytest-cov
     - name: Test with pytest
       run: |
-        python -m pytest --import-mode=append clack_root/test/
+        python -m pytest clack_root/test --doctest-modules --junitxml=junit/test-results.xml --cov=com --cov-report=xml --cov-report=html
+    - name: Upload pytest test results
+      uses: actions/upload-artifact@v3
+      with:
+        name: pytest-results
+        path: D:\a\the-project-marbl\the-project-marbl\junit\test-results.xml
+      # Use always() to always run this step to publish test results when there are test failures
+      if: ${{ always() }}
         
