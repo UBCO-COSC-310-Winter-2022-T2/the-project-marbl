@@ -1,22 +1,12 @@
-import pyrebase
 import json
 from front_end.Session import Session
-
-config = {
-  "apiKey": "AIzaSyAT_ILhmjVI1gv9qdWrfsFaxJSt8cvNsSw",
-  "authDomain": "cosc310-marbl.firebaseapp.com",
-  "databaseURL": "https://cosc310-marbl-default-rtdb.firebaseio.com",
-  "storageBucket": "cosc310-marbl.appspot.com"
-}
-
-firebase = pyrebase.initialize_app(config)
-auth = firebase.auth()
-database = firebase.database()
+from front_end.FirebaseConnection import FirebaseConnection
 
 class SessionManager:
   def __init__(self):
-    self.auth = auth
-    self.database = database
+    self.firebase = FirebaseConnection()
+    self.auth = self.firebase.get_auth_connection()
+    self.database = self.firebase.get_database_connection()
     self.existingSession = None
 
   def get_existing_session(self):
