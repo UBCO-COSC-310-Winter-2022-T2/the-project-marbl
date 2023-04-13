@@ -1,5 +1,5 @@
 import pyrebase
-
+from front_end.Database import Database
 
 class FirebaseConnection:
     def __init__(self):
@@ -18,7 +18,7 @@ class FirebaseConnection:
          if(self.database):
              return self.database
          else:
-             self.database = self.firebase_connection.database()
+             self.database = Database(self.firebase_connection)
              return self.database
     def get_auth_connection(self):
          if(self.auth):

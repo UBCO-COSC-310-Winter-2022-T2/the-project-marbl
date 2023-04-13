@@ -43,7 +43,7 @@ class SessionManager:
       user = self.auth.create_user_with_email_and_password(email, password)
       return user
     except Exception as e:
-      self.clear_user_data(username)
+      self.database.remove_account_data(username)
       return json.loads(e.strerror)
   
   def save_user_data(self, username, first_name, last_name):
@@ -60,17 +60,10 @@ class SessionManager:
     "last_name": last_name,
     }
     # Set the UID key in the database to the user data
-    if(self.get_username_exists(username)):
+    if(self.database.get_username_exists(username)):
       raise Exception("Username exists already :(")
     else:
-      self.database.child("users").child(username).set(data)
-  
-  def clear_user_data(self,username):
-    if(self.get_username_exists(username)):
-      self.database.child("users").child(username).set(None)
-  
-  def get_username_exists(self, username):
-    if(self.database.child('users').child(username).get().val()):
-      return True
-    else:
-      return False
+      if(self.database.create_user_with_data(username,data)):
+        return True
+      else:
+        raise Exception("Error creating user ??? why")

@@ -1,20 +1,28 @@
 import json
 class Database:
-    def __init__(self):
-        from front_end.Getters import get_firebase_connection
-        self.firebasecon = get_firebase_connection()
-        self.db = self.firebasecon.get_database_connection()
+    def __init__(self,connection):
+        self.db = connection.database()
 
     def convert_ordered_dict_to_dict(self, ordered_dict):
-        my_dict = json.loads(json.dumps(ordered_dict))
-        return my_dict
+        try:
+            my_dict = json.loads(json.dumps(ordered_dict))
+            return my_dict
+        except Exception as e:
+            print("dict conversion error:", e)
+            return {}
     
+    def get_username_exists(self,username: str):
+        if(self.get_info_from_username(username) is not None):
+            return True
+        else:
+            return False
+
     def get_info_from_username(self, username: str):
         if (len(username) < 3):
-            return False
+            return None
         try:
-            info = self.db.child("users").child(username).get().val()
-            info = self.convert_ordered_dict_to_dict(info)
+            info = self.db.child("users").child(username).get()
+            info = self.convert_ordered_dict_to_dict(info.val())
             return info
         except Exception as e:
             print("DATABASE ERROR:", e)
@@ -47,7 +55,24 @@ class Database:
             return False
         try:
             friends = self.db.child("users").child(username).child("friends").get()
+            friends = self.convert_ordered_dict_to_dict(friends.val())
             return friends
         except Exception as e:
             print("DATABASE ERROR:", e)
             return None
+        
+    def remove_account_data(self, username):
+        try:
+            self.db.child("users").child(username).set(None)
+            return True
+        except Exception as e:
+            print("DATABASE ERROR:", e)
+            return False
+    
+    def create_user_with_data(self,username,data):
+        try:
+            self.db.child("users").child(username).set(data)
+            return True
+        except Exception as e:
+            print("DATABASE ERROR:", e)
+            return False
