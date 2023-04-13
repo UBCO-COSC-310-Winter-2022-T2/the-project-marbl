@@ -5,8 +5,21 @@ class Database:
     self.db = self.firebasecon.get_database_connection()
 
   def get_info_from_username(self, username : str):
-    pass
-    #return self.db.child("users").child(username).get()
-  def add_to_friends_list(self, username,to_be_added_username):
-    pass
-    #self.database.child("users").child(username).child("friends").child("horse_friend").set({"cool":True})
+    if(len(username) < 3):
+        return False
+    try:
+        info = self.db.child("users").child(username).get()
+        return info
+    except Exception as e:
+        print("DATABASE ERROR:", e)
+        return None
+
+  def add_to_friends_list(self, adding_username1,added_username2):
+    if(len(adding_username1) < 3 or len(added_username2) < 3):
+        return False
+    try:
+        self.db.child("users").child(adding_username1).child("friends").child(added_username2).set({"cool":True}) #needs a key so cool: true as a placeholder :D
+        return True
+    except Exception as e:
+        print("DATABASE ERROR:", e)
+        return False
