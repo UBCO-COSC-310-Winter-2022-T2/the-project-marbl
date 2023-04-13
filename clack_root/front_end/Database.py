@@ -62,6 +62,8 @@ class Database:
             print("DATABASE ERROR:", e)
             return None
         
+    # deletes user information in the realtime database, but their account
+    # is not deleted in firebase
     def remove_account_data(self, username):
         try:
             self.db.child("users").child(username).set(None)
@@ -78,29 +80,53 @@ class Database:
             print("DATABASE ERROR:", e)
             return False
     
-    ######### Chat functions ###########
-
-    def create_group_chat(self,chat_name):
+    def set_status_by_username(self,username : str, state : bool):
         try:
-            self.db.child("chats").child(chat_name).set({"chatname": chat_name})
+            self.db.child("users").child(username).child("status").set(state)
             return True
         except Exception as e:
             print("DATABASE ERROR:", e)
             return False
-    def get_group_chats(self):
+    
+    def get_status_by_username(self,username : str):
         try:
-            chats = self.db.child("chats").get()
-            chats = self.convert_ordered_dict_to_dict(chats.val())
+            status = self.db.child("users").child(username).child("status").get()
+            status = self.convert_ordered_dict_to_dict(status.val())
+            return status
+        except Exception as e:
+            print("DATABASE ERROR:", e)
+            return None
+    
+    ######### Chat functions ###########
+    def get_chats_by_username(self,username):
+        try:
+            chats = self.db.child("users").child(username).child("chats").get()
+            chats = list(self.convert_ordered_dict_to_dict(chats.val()).keys())
             return chats
         except Exception as e:
             print("DATABASE ERROR:", e)
             return None
     
-    def get_group_chat_by_name(self,name):
+    def add_user_to_group_chat(self,username,chat_id):
         try:
-            chat = self.db.child("chats").child(name).get()
-            chat = self.convert_ordered_dict_to_dict(chat.val())
-            return chat
+            self.db.child("users").child(username).child("chats").child(chat_id).set({"cool": True})
+            self.db.child("chats").child(chat_id).child("users").child(username).set({"cool": True})
+            return True
+        except Exception as e:
+            print("DATABASE ERROR:", e)
+            return False
+    def create_group_chat(self,chat_name):
+        try:
+            self.db.child("chats").push({"chatname": chat_name})
+            return True
+        except Exception as e:
+            print("DATABASE ERROR:", e)
+            return False
+    def get_all_group_chats(self):
+        try:
+            chats = self.db.child("chats").get()
+            chats = self.convert_ordered_dict_to_dict(chats.val())
+            return list(chats.keys())
         except Exception as e:
             print("DATABASE ERROR:", e)
             return None
