@@ -30,4 +30,7 @@ def getCommandInterface():
     return CommandInterface_instance
 
 def get_firebase_connection():
-    pass
+    global firebase_connection
+    if(firebase_connection == None):
+        firebase_connection = FirebaseConnection()
+    return firebase_connection
