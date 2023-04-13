@@ -1,0 +1,90 @@
+@startjson
+
+{
+    "chats" : {
+        "chatkey1" : {
+            "chatname" : "super cool chatroom",
+            "users" : [
+            "username1", "username2", "username3", "..."
+            ],
+            "messages" : {
+                "msgid4" : {
+                    "author" : "username1",
+                    "time" : 9000.4555,
+                    "message" : "hello world"
+                }
+                ,
+                "msgid3" : {
+                    "author" : "username2",
+                    "time" : 6543.3425,
+                    "message" : "eaugh"
+                }
+                ,
+                "msgid2" : {
+                    "author" : "username3",
+                    "time" : 5500.3245,
+                    "message" : ":)"
+                }
+                ,
+                "msgid1" : {
+                    "author" : "username1",
+                    "time" : 3345.3254,
+                    "message" : "eaugh"
+                }
+                ,
+                "..." : "..."
+            }
+        }
+        ,
+        "chatkey2" : {
+            "chatname" : "username username3",
+            "users" : [
+            "username1", "username3"
+            ],
+            "messages" : {
+                "msgid3" : {
+                    "author" : "username1",
+                    "time" : 9450.4555,
+                    "message" : "world"
+                }
+                ,
+                "msgid2" : {
+                    "author" : "username3",
+                    "time" : 6573.3425,
+                    "message" : "eaugha"
+                }
+                ,
+                "msgid1" : {
+                    "author" : "username3",
+                    "time" : 5501.3245,
+                    "message" : ":()"
+                }
+                ,
+                "..." : "..."
+            }
+        },
+        "..." : "..."
+    },
+    "users" : {
+        "username1" : {
+            "status (don't implement yet)" : "true",
+            "friends" : [
+                "username2",
+                "username3",
+                "..."
+            ]
+        },
+        "username2" : {
+            "status (don't implement yet)" : "true",
+            "friends" : [
+                "username1",
+                "username3",
+                "username4",
+                "..."
+            ]
+        },
+        "..." : "..."
+    }
+}
+
+@endjson
