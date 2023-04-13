@@ -29,9 +29,9 @@ class MQTTClient:
         except:
             return False
 
-    def publish(self, chat, msg):
+    def publish(self, chat, msg, qos):
         try:
-            self.client.publish(chat, msg)
+            self.client.publish(chat, msg, qos)
             return True
         except:
             return False
