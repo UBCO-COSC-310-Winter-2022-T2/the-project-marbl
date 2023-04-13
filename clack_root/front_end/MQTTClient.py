@@ -1,9 +1,10 @@
 import paho.mqtt.client as mqtt
 
 class MQTTClient:
-    def __init__(self, broker_url):
+    def __init__(self, broker_url, client_name):
         self.broker_url = broker_url
         self.client = mqtt.Client()
+        self.client = mqtt.Client(client_name)
         self.client.on_message = self.on_message
         self.client.on_disconnect = self.on_disconnect
         self.client.on_connect = self.on_connect
