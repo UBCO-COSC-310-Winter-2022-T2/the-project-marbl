@@ -11,6 +11,18 @@ class FirebaseConnection:
         }
         self.firebase = pyrebase
         self.firebase_connection = self.firebase.initialize_app(self.config)
+        self.database = None
+        self.auth = None
 
     def get_database_connection(self):
-         pass
+         if(self.database):
+             return self.database
+         else:
+             self.database = self.firebase_connection.database()
+             return self.database
+    def get_auth_connection(self):
+         if(self.auth):
+             return self.auth
+         else:
+             self.auth = self.firebase_connection.auth()
+             return self.auth
