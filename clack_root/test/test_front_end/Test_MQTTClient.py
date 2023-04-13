@@ -21,13 +21,13 @@ def test_end_connection():
 
 def test_subscribe():
     # set up the MQTT client object
-    client = MQTTClient('test.mosquitto.org')
+    client = MQTTClient('test.mosquitto.org', "test-user")
     assert client.subscribe('test_chat') == True
     assert client.subscribe('') == False
 
 def test_publish():
     # set up the MQTT client object
-    client = MQTTClient('test.mosquitto.org')
+    client = MQTTClient('test.mosquitto.org', "test-user")
     assert client.publish('test_chat', 'test message') == True
     assert client.publish('test_chat', '') == False
     assert client.publish('', 'hello') == False
