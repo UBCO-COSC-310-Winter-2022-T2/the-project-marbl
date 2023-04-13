@@ -32,3 +32,11 @@ def test_get_friends_from_username():
     db = get_database()
     assert db.get_friends_from_username('test_user') is not None
     assert not db.get_friends_from_username('')
+
+import collections
+
+def test_convert_ordered_dict_to_dict():
+    ordered_dict = collections.OrderedDict([('a', 1), ('b', 2), ('c', 3)])
+    db = get_database()
+    result = db.convert_ordered_dict_to_dict(ordered_dict)
+    assert result == {'a': 1, 'b': 2, 'c': 3}

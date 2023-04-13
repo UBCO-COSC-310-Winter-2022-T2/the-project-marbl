@@ -27,10 +27,10 @@ front_end/authtest.py
 listener_server/ListenerServer.py
 listener_server/__init__.py
 listener_server/listener_server_main.py
-test/Test_Database.py
 test/__init__.py
 test/test.py
 test/test_front_end/Test_CommandInterface.py
+test/test_front_end/Test_Database.py
 test/test_front_end/Test_FirebaseConnection.py
 test/test_front_end/Test_Getters.py
 test/test_front_end/Test_MQTTClient.py
