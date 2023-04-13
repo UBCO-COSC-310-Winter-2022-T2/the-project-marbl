@@ -36,7 +36,6 @@ class SessionManager:
       self.save_user_data(username, first_name, last_name)
     except Exception as e:
       print("DATABASE ERROR:", e)
-      self.clear_user_data(username)
       return {"error": {"message": str(e)}}
     
     #try to create account
@@ -56,22 +55,22 @@ class SessionManager:
         raise Exception("Last name must be at least 1 character long. This really should not happen!")
     
     data = {
+    "status" : True,
     "first_name": first_name,
     "last_name": last_name,
-    "username": username
     }
     # Set the UID key in the database to the user data
     if(self.get_username_exists(username)):
       raise Exception("Username exists already :(")
     else:
-      return database.child("users").child(username).set(data)
+      self.database.child("users").child(username).set(data)
   
   def clear_user_data(self,username):
     if(self.get_username_exists(username)):
-      database.child("users").child(username).set(None)
+      self.database.child("users").child(username).set(None)
   
   def get_username_exists(self, username):
-    if(database.child('users').child(username).get().val()):
+    if(self.database.child('users').child(username).get().val()):
       return True
     else:
       return False
