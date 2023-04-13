@@ -1,4 +1,4 @@
-from front_end.Getters import getMQTTClient, getSessionManager, getCommandInterface
+from front_end.Getters import getMQTTClient, getSessionManager, getCommandInterface, get_firebase_connection
 
 def test_getMQTTClient():
     # test that getMQTTClient returns the same MQTTClient instance
@@ -20,3 +20,9 @@ def test_getCommandInterface():
     client1 = getCommandInterface()
     client2 = getCommandInterface()
     assert client1 is client2
+
+def test_get_firebase_connection():
+    # test that get_firebase_connection returns the same instance
+    client1 = get_firebase_connection()
+    client2 = get_firebase_connection()
+    assert client1 is not None and client1 is client2

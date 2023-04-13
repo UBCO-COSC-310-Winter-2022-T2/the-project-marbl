@@ -19,7 +19,7 @@ def test_login():
     assert r1 and r1["session"] is not None
 
     assert r2 and r2["success"] == False
-    assert r2 and r2["errorMsg"] is not None
+    assert r2 and r2["error"] is not None
 
 
 def test_register():

@@ -6,6 +6,8 @@ CLACK.egg-info/entry_points.txt
 CLACK.egg-info/top_level.txt
 front_end/Chat.py
 front_end/CommandInterface.py
+front_end/Database.py
+front_end/FirebaseConnection.py
 front_end/Getters.py
 front_end/GroupChat.py
 front_end/MQTTClient.py
@@ -21,6 +23,8 @@ listener_server/listener_server_main.py
 test/__init__.py
 test/test.py
 test/test_front_end/Test_CommandInterface.py
+test/test_front_end/Test_Database.py
+test/test_front_end/Test_FirebaseConnection.py
 test/test_front_end/Test_Getters.py
 test/test_front_end/Test_MQTTClient.py
 test/test_front_end/Test_Message.py
