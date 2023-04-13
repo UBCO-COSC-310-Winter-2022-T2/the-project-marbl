@@ -1,0 +1,6 @@
+pytest
+firebase_admin
+typing_extensions
+paho-mqtt
+PyQt5
+pyrebase4

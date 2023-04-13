@@ -1,5 +1,5 @@
-from clack_root.front_end.Chat import Chat
 
+from front_end.Chat import Chat
 
 class GroupChat(Chat):
     def __init__(self, chatId, admin, chatName):
