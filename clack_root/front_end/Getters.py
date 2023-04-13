@@ -4,12 +4,14 @@ from front_end.MQTTClient import MQTTClient
 from front_end.SessionManager import SessionManager
 from front_end.CommandInterface import CommandInterface
 from front_end.FirebaseConnection import FirebaseConnection
+from front_end.Database import Database
 
 
 MQTTClient_instance = None
 SessionManager_instance = None
 CommandInterface_instance = None
 firebase_connection = None
+database_instance = None
 
 def getMQTTClient(host: str) -> MQTTClient:
     global MQTTClient_instance
@@ -34,3 +36,9 @@ def get_firebase_connection():
     if(firebase_connection == None):
         firebase_connection = FirebaseConnection()
     return firebase_connection
+
+def get_database():
+    global database_instance
+    if(database_instance == None):
+        database_instance = Database()
+    return database_instance
