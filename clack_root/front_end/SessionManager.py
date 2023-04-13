@@ -25,7 +25,7 @@ class SessionManager:
   def sign_in_with_email_and_password(self, email, password): #session expires every hour, refresh with user = auth.refresh(user['refreshToken'])
     try:
       response = self.auth.sign_in_with_email_and_password(email, password)
-      self.existingSession = Session(response['idToken'], response['expiresIn'], response['refreshToken'], response['registered'], response['email'])
+      self.existingSession = Session(response['idToken'], response['expiresIn'], response['refreshToken'], response['registered'], response['email'], "example_username")
       return self.existingSession
     except Exception as e:
       return json.loads(e.strerror)
