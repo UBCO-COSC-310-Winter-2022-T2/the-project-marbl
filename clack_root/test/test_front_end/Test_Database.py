@@ -37,3 +37,8 @@ def test_convert_ordered_dict_to_dict():
     db = Database("asd")
     result = db.convert_ordered_dict_to_dict(ordered_dict)
     assert result == {'a': 1, 'b': 2, 'c': 3}
+
+def test_get_group_chats_for_username():
+    pyrebase.initialize_app = Mock()
+    db = get_firebase_connection().get_database_connection().db
+    assert db.get_group_chats_for_username('test_user') is not None

@@ -11,6 +11,7 @@ class Database:
             print("dict conversion error:", e)
             return {}
     
+    ######### User functions ###########
     def get_username_exists(self,username: str):
         if(self.get_info_from_username(username) is not None):
             return True
@@ -76,3 +77,32 @@ class Database:
         except Exception as e:
             print("DATABASE ERROR:", e)
             return False
+    
+    ######### Chat functions ###########
+
+    def create_group_chat(self,chat_name):
+        try:
+            self.db.child("chats").child(chat_name).set({"chatname": chat_name})
+            return True
+        except Exception as e:
+            print("DATABASE ERROR:", e)
+            return False
+    def get_group_chats(self):
+        try:
+            chats = self.db.child("chats").get()
+            chats = self.convert_ordered_dict_to_dict(chats.val())
+            return chats
+        except Exception as e:
+            print("DATABASE ERROR:", e)
+            return None
+    
+    def get_group_chat_by_name(self,name):
+        try:
+            chat = self.db.child("chats").child(name).get()
+            chat = self.convert_ordered_dict_to_dict(chat.val())
+            return chat
+        except Exception as e:
+            print("DATABASE ERROR:", e)
+            return None
+    
+    
