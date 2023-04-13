@@ -9,10 +9,11 @@ MQTTClient_instance = None
 SessionManager_instance = None
 CommandInterface_instance = None
 
-def getMQTTClient(host: str) -> MQTTClient:
+def getMQTTClient(host: str, client_name: str) -> MQTTClient:
     global MQTTClient_instance
     if(MQTTClient_instance == None):
-        MQTTClient_instance = MQTTClient(host)
+        MQTTClient_instance = MQTTClient(host, client_name)
+        MQTTClient_instance.start_connection()
     return MQTTClient_instance
 
 def getSessionManager():
