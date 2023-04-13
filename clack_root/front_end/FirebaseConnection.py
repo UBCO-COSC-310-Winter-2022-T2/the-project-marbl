@@ -9,7 +9,8 @@ class FirebaseConnection:
             "databaseURL": "https://cosc310-marbl-default-rtdb.firebaseio.com",
             "storageBucket": "cosc310-marbl.appspot.com"
         }
-        self.pyrebase_connection = pyrebase.initialize_app(self.config)
+        self.firebase = pyrebase
+        self.firebase_connection = self.firebase.initialize_app(self.config)
 
-    def getDatabaseConnection(self):
+    def get_database_connection(self):
          pass
