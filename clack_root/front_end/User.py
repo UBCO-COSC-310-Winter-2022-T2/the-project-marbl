@@ -12,7 +12,7 @@ class User:
         self._onlineStatus = False
 
     def get_username(self) -> str:
-        pass
+        return self._username
 
     def set_username(self, new_username: str) -> None:
         pass
