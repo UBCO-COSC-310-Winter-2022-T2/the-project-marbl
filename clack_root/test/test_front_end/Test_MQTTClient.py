@@ -8,7 +8,7 @@ def test_start_connection():
     assert client.start_connection() == True
 
     client = MQTTClient('notvalid')
-    assert client2.start_connection() == False
+    assert client.start_connection() == False
 
 def test_end_connection():
     client = MQTTClient('test.mosquitto.org')
