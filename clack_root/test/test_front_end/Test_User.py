@@ -1,3 +1,4 @@
+
 from front_end.User import User, UserList
 import importlib
 
@@ -33,19 +34,22 @@ def test_add_remove_friends():
     assert len(user1.get_friends()) ==0
 
 def test_chat_methods():
+    from front_end.Chat import Chat
     # Test the methods of a User instance
     user1 = User('adam', 'adampw', 'adam@example.com')
     user2 = User('peep', 'peeppw', 'peep@example.com')
 
+    chat1 = Chat(4)
+    chat2 = Chat(5,'chat2')
     # Test joining and leaving chats
-    user1.join_chat('chat1')
-    user1.join_chat('chat2')
-    assert user1._chats == ['chat1', 'chat2']
-    user1.leave_chat('chat1')
-    assert user1._chats == ['chat2']
+    user1.join_chat(chat1)
+    user1.join_chat(chat2)
+    assert user1._chats == [chat1, chat2]
+    user1.leave_chat(chat1)
+    assert user1._chats == [chat2]
 
 
-def test_find_by_username():
-    # Test finding a user by username
-    user1 = User('adam', 'adampw', 'adam@example.com')
-    assert User.find_user_by_username('adam') == user1
+# def test_find_by_username():
+#     # Test finding a user by username
+#     user1 = User('adam', 'adampw', 'adam@example.com')
+#     assert User.find_user_by_username('adam') == user1

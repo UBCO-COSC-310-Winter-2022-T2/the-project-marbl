@@ -1,3 +1,6 @@
+import sys 
+print(f"PATH:::::::{sys.path}")
+sys.path.append("c:\\Users\\Levi\\Desktop\\COSC310\\the-project-marbl\\clack_root") 
 from front_end.User import User, UserList
 
 def test_create_list():
@@ -26,4 +29,4 @@ def test_insert():
     u = User('bob','123','g@yolo')
     m.append(u)
     m.insert(0,u)
-    assert m[0] == u
+    assert m[0] == u    
