@@ -1,5 +1,5 @@
 
-from typing import Self
+
 from front_end.Chat import Chat
 
 
@@ -52,32 +52,39 @@ class User:
     def get_friends(self) -> list:
         return self._friends
 
-    def add_friend(self, user : Self) -> bool:
+    def add_friend(self, user) -> bool:
         '''
         #### returns
         
         false if refrence is itself or already conatians the User passed in
-        '''
+        '''        
+        if(isinstance(user, User) == False):
+            raise TypeError("only take in User type")
+        peep : User = user
+
         for frnd in self._friends:
             usr : User = frnd
             if(usr.get_username() == self._username):
                 return False
-            if(usr.get_username() == user.get_username()):
+            if(usr.get_username() == peep.get_username()):
                 return False
-        self._friends.append(user)
+        self._friends.append(peep)
         return True
             
         
-    def remove_friend(self, user :  Self) -> bool:
+    def remove_friend(self, user) -> bool:
         '''
-        #### returns 
-        
+        #### returns     
         false if user does not exist
         '''
+        if(isinstance(user, User) == False):
+            raise TypeError("only take in User type")
+        peep : User = user
+
         for frnd in self._friends:
             usr : User = frnd
-            if(usr.get_username() == user.get_username()):
-                self._friends.remove(user)
+            if(usr.get_username() == peep.get_username()):
+                self._friends.remove(peep)
                 return True
         return False
 
