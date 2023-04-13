@@ -1,7 +1,10 @@
-from front_end.User import User
+from front_end.User import User, UserList
+import importlib
 
+ 
 def test_getters_setters():
-    user = User()
+   # importlib.reload(User)
+    user = User('b','1','@')
     #username
     user.set_username('mlgguy1337')
     assert user.get_username() == 'mlgguy1337'

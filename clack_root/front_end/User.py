@@ -13,21 +13,33 @@ class User:
         self._chats : Chat = []
         self._onlineStatus = False
 
-    def get_username(self) -> str:
-        return self._username
+    def verify_password(self, entered_password: str) -> bool:
+         return  self._password == entered_password
 
     def set_username(self, new_username: str) -> None:
         self._username = new_username
 
-    def verify_password(self, entered_password: str) -> bool:
-         return  self._password == entered_password
+    def set_email(self,new_adress : str):
+        self._email = new_adress
 
     def set_password(self, new_password: str) -> None:
         self._password = new_password
 
     def set_online_status(self, status: bool) -> None:
         self._onlineStatus = status
-
+        
+    #-----------getters----------------------
+    
+    def get_email(self)-> str:
+        return self._email
+    
+    #possibly not a good idea 
+    def get_password(self)-> str:
+        return self._password
+    
+    def get_username(self) -> str:
+        return self._username
+    
     def get_online_status(self) -> bool:
         return self._onlineStatus
  
@@ -48,8 +60,6 @@ class User:
     def remove_friend(self, user :  Self) -> bool:
          for frnd in self._friends:
             usr : User = frnd
-            if(usr.get_username() == self._username):
-                return False
             if(usr.get_username() == user.get_username()):
                 self._friends.remove(user)
                 return True
