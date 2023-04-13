@@ -9,6 +9,24 @@ skinparam componentStyle uml2
 class Client{}
 Client "1"--"1" UI: Uses
 
+class Database{
++DatabaseConnection
++getUserInfo(String username)
++getFriendsOfUsername(String username)
++OtherQueries()
+}
+
+class FirebaseConnection{
+-Config
+-PyrebaseConnection
++getDatabaseConnection() : PyrebaseDatabase
++getAuthenticationConnection() : PyrebaseAuth
+}
+
+Session "1"--"1" Database: Queries
+Database "1"--"1" FirebaseConnection: uses
+SessionManager "1"--"1" FirebaseConnection
+
 class Message{
     - message : String
     - time : double
