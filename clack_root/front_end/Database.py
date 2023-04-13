@@ -23,3 +23,6 @@ class Database:
     except Exception as e:
         print("DATABASE ERROR:", e)
         return False
+
+def remove_from_friends_list(self, username_removing,username_to_remove):
+   pass
