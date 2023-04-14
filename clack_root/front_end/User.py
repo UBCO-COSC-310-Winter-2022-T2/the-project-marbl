@@ -80,6 +80,23 @@ class User:
         else:
             other_user.pending_requests.append(self)
             print(f"Sent friend request to {other_user.name}.")
+            
+    def remove_friend(self, user) -> bool:
+        '''
+        #### returns     
+        false if user does not exist
+        '''
+        if(isinstance(user, User) == False):
+            raise TypeError("only take in User type")
+        peep : User = user
+
+        for frnd in self._friends:
+            usr : User = frnd
+            if(usr.get_username() == peep.get_username()):
+                self._friends.remove(peep)
+                return True
+        return False
+
 
 
     def join_chat(self, chat : Chat) -> bool:
