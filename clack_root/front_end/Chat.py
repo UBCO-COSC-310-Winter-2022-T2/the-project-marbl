@@ -10,9 +10,11 @@ class Chat:
         self.message_history = []
         
     # get users by doing myChat.users
+    # get chat_id by doing myChat.chat_id
     
     def get_chat_name(self) -> str:
         return self.chat_name
+    
 
     def get_message_history(self) -> list:
         return self.message_history
@@ -66,8 +68,8 @@ class ChatList(list):
         else:
             raise ValueError('Type Chat only')
 
-    def find_chat_by_name(self, name: str) -> Chat:
+    def find_chat_by_id(self, id: str) -> Chat:
         for chat in super(ChatList, self):
-            if chat.get_chat_name() == name:
+            if chat.chat_id == id:
                 return chat
         return None  # type: ignore
