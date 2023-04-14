@@ -39,7 +39,7 @@ def test_send_message():
     sys.stdout = capturedOutput  # and redirect stdout.
 
     my_test_session.SendMessage("hello world!", "testchatroom")
-    time.sleep(2)  # wait to make sure client gets message
+    time.sleep(4)  # wait to make sure client gets message
 
     assert "test_username1: hello world!" in capturedOutput.getvalue()
 
