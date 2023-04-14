@@ -15,12 +15,14 @@ class SessionManager:
   def sign_in_with_email_and_password(self, email, password): #session expires every hour, refresh with user = auth.refresh(user['refreshToken'])
     try:
       response = self.auth.sign_in_with_email_and_password(email, password)
-      # TODO: IMPLEMENT WAY TO OBTAIN USERNAME FROM EMAIL GIVEN
-      my_user = User("example_username", "password123", email) #making password field password123 since we probably don't want to store passwords haha
-      self.existingSession = Session(response['idToken'], response['expiresIn'], response['refreshToken'], response['registered'], response['email'], my_user)
-      return self.existingSession
+      if("email" in response and response["email"] == email):
+        username = self.database.get_username_from_email(email) or "anon"
+        my_user = User(username, "password123", email) #making password field password123 since we probably don't want to store passwords haha
+        self.existingSession = Session(response['idToken'], response['expiresIn'], response['refreshToken'], response['registered'], response['email'], my_user)
+        return self.existingSession
     except Exception as e:
-      return json.loads(e.strerror)
+      if(e.strerror):
+        return json.loads(e.strerror)
   
   def forgot_password(self, email):
     try:
