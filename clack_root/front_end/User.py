@@ -1,6 +1,6 @@
 
 
-from front_end.Chat import Chat
+
 
 
 
@@ -11,11 +11,11 @@ class User:
     should not be a actor.
     '''
     def __init__(self, username: str, password: str, email: str):
-        from front_end.Chat import ChatList
         self._username = username
         self._password = password
         self._email = email
         self._friends = UserList()
+        from front_end.Chat import ChatList
         self._chats = ChatList()
         self._onlineStatus = False
 
@@ -35,6 +35,9 @@ class User:
         self._onlineStatus = status
         
     #-----------getters----------------------
+    
+    def get_chats(self):
+        return self._chats
     
     def get_email(self)-> str:
         return self._email
@@ -89,7 +92,7 @@ class User:
         return False
 
 
-    def join_chat(self, chat : Chat) -> bool:
+    def join_chat(self, chat) -> bool:
         '''
         adds user to chat if not already in it
         does so reflexsevely
@@ -106,7 +109,7 @@ class User:
           
         
 
-    def leave_chat(self, chat: Chat) -> bool:
+    def leave_chat(self, chat) -> bool:
         '''
         leave chat room reflexsively
         '''
@@ -119,7 +122,7 @@ class User:
                 return True        
 
         return False
-
+    
 
 class UserList(list):
     '''
