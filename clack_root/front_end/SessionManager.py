@@ -36,11 +36,15 @@ class SessionManager:
       data = self.database.get_chat_info_by_chat_id(chat_id)
       if(data):
         chat_name = data["chat_name"]
-        my_chat = Chat(chat_id, chat_name) #create chat object from each
+        my_chat = Chat(chat_id, chat_name) #create chat object
         all_messages = self.database.get_message_objects_from_chat(chat_id)
         my_chat.set_message_history(all_messages) #set message history of chat
-        my_chat.set_user_list(self.database.get_user_list_from_chat(chat_id)) #set user list of chat
-        user_object.join_chat(my_chat) # user joins chat
+        all_users = self.database.get_user_list_from_chat(chat_id) #get user list of chat
+        for user in all_users:
+          if(user.get_username() == user_object.get_username()):
+            user_object.join_chat(my_chat)
+          else:
+            user.join_chat(my_chat) #add user to chat if not already in
   def populate_user_with_friends(self,user_object):
     #todo this
     pass
