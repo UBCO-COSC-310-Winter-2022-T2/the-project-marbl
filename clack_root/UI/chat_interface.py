@@ -19,13 +19,16 @@ from front_end.Chat import Chat
 
 
 class ChatInterface(QMainWindow):
+    '''
+    main Window body holds text promt and message hisotory and otehr chats aviable to click
+    '''
   
     _title : str  
     _UI_messages = []
     _messages = []
     _chat_rooms = []
     _UI_chats_rooms = []
-    _cur_chat : Chat 
+    _cur_chat : Chat = None # type: ignore
     
     def __init__(self, title="--") -> None:
         '''
@@ -73,6 +76,7 @@ class ChatInterface(QMainWindow):
         of UI objs meesages.
         '''
         self._messages.append(msg)
+        #possibly save to db 
         if self._cur_chat != None:#add the new message to history
             self._cur_chat.add_message_to_history(msg)
         self._UI_messages.append(UIMessage(msg.getAuthor(),msg.getMessage(),msg.getDate()))
@@ -156,10 +160,13 @@ class ChatInterface(QMainWindow):
         self._messages.clear()
         self._UI_messages.clear()
         
+        #set title
+        self.setWindowTitle(target_chat.chat_name)
+        
         #get new history from chat
-        self._messages = target_chat.message_history
-       
+        self._messages = target_chat.message_history        
         self.set_messages(self._messages)
+        
         #remove old list view widget
         self._chat_view_layout.removeWidget(self._list_view_messages)
         self._list_view_messages = ScrollableList(self._UI_messages)
@@ -191,6 +198,9 @@ class ChatInterface(QMainWindow):
         #add new list view from new messages 
         self._rebiuld_stack()     
         
+#-------------------------------------------------------------------------------    
+#------------Helper classes-----------------------------------------------------
+#-------------------------------------------------------------------------------
         
 class UIChat(QWidget):
     '''
