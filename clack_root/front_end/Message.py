@@ -10,14 +10,13 @@ class Message:
     _date : datetime
     _message :str
     
-    def __init__(self, message: str, author : User, date:datetime=datetime.now()): # type: ignore
-
+    def __init__(self, message: str, author : User, date:datetime=datetime.now()): 
 
         '''
         create new message object with date initailizeing upon creating the object
         '''
         self._message = message
-        self._time = time
+        self._date = date
         self._author = author
     
     

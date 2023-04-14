@@ -32,7 +32,7 @@ class SessionManager:
                 print("User object created:")
                 print(vars(my_user))
                 self.existingSession = Session(
-                    response['idToken'], response['expiresIn'], response['refreshToken'], response['registered'], response['email'], my_user)
+                    response['idToken'], response['expiresIn'], response['refreshToken'], response['registered'], response['email'], my_user) # type: ignore
 
                 return self.existingSession
         except requests.HTTPError as e:
@@ -52,7 +52,7 @@ class SessionManager:
                 all_messages = self.database.get_message_objects_from_chat(
                     chat_id)
                 # set message history of chat
-                my_chat.set_message_history(all_messages)
+                my_chat.set_message_history(all_messages) # type: ignore
                 all_users = self.database.get_user_list_from_chat(
                     chat_id)  # get user list of chat
                 for user in all_users:

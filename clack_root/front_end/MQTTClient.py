@@ -53,7 +53,7 @@ class MQTTClient:
               chatroom + " at time " + str(msg_json["time"]))
         currSession = self.mySM.get_existing_session()
         if currSession is not None: #if there is an existing session (as you probably don't want to recieve chat if not logged in)
-            currUser = currSession.getCurrentUser()
+            currUser = currSession.getCurrentUser() # type: ignore
             currChats = currUser.get_chats()
             currChat = currChats.find_chat_by_id(chatroom)
             theMessage = Message(msg_json["message"], msg_json["author"], msg_json["time"])

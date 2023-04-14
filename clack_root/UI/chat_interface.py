@@ -65,6 +65,7 @@ class ChatInterface(QMainWindow):
         self._chat_room_views =  ScrollableList(self._UI_chats_rooms)
         self._list_view_messages = ScrollableList(self._UI_messages)
         self._rebiuld_stack()
+        self.show()
        
         
 
@@ -314,22 +315,27 @@ class UIMessage(QWidget):
         hud.addWidget(time_stamp)
         self.setLayout(body)
 
-#this down here is for testing purposes should be turned into 
-#white box tests but can be removed or commented out.        
-app = QApplication(sys.argv)
-login_window = ChatInterface()
-login_window.show()
-#example stuffs 
-chat = Chat(2,"yolo")
-login_window.add_chat_room(chat=chat)
-chat.message_history.append(Message("yolo",User("sally","123","emial@hot")))
-chat.message_history.append(Message("yolo",User("sally","123","emial@hot")))
-print(len(chat.message_history))
-login_window.set_messages(chat.message_history)
-login_window.set_chats_rooms([chat])
-login_window.update_UI()
-login_window.add_Message(Message("yolo",User("sally","123","emial@hot")))
-login_window.update_UI()
-sys.exit(app.exec_())
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    login_window = ChatInterface("--")
+    login_window.show()
+    sys.exit(app.exec_())
+# #this down here is for testing purposes should be turned into 
+# #white box tests but can be removed or commented out.        
+# app = QApplication(sys.argv)
+# login_window = ChatInterface()
+# login_window.show()
+# #example stuffs 
+# chat = Chat(2,"yolo")
+# login_window.add_chat_room(chat=chat)
+# chat.message_history.append(Message("yolo",User("sally","123","emial@hot")))
+# chat.message_history.append(Message("yolo",User("sally","123","emial@hot")))
+# print(len(chat.message_history))
+# login_window.set_messages(chat.message_history)
+# login_window.set_chats_rooms([chat])
+# login_window.update_UI()
+# login_window.add_Message(Message("yolo",User("sally","123","emial@hot")))
+# login_window.update_UI()
+# sys.exit(app.exec_())
 
         

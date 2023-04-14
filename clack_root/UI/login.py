@@ -3,6 +3,7 @@ import sys
 from signup import SignupScreen
 from forgot import ForgotPasswordScreen
 from front_end.Getters import getCommandInterface
+from chat_interface import ChatInterface
 
 class LoginWindow(QWidget):
     def __init__(self):
@@ -55,6 +56,12 @@ class LoginWindow(QWidget):
     def show_login_screen(self):
         self.show()
 
+    def show_chat_interface(self):
+        self.hide()
+        self.chat_interface = ChatInterface(self)
+        self.chat_interface.show()
+        
+    
     def login(self):
         email = self.email_input.text()
         password = self.password_input.text()
@@ -65,7 +72,8 @@ class LoginWindow(QWidget):
             print(result)
             self.set_message(result["error"]["message"]) # type: ignore
         else:
-            #move to main screen
+            #move to main screen           
+            #self.show_chat_interface()
             self.set_message("wooo you logged in! congrats")
             pass
         
