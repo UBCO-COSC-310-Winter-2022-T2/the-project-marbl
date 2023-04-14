@@ -73,7 +73,6 @@ class User:
                 return False
         self._friends.append(peep)
         return True
-            
         
     def remove_friend(self, user) -> bool:
         '''

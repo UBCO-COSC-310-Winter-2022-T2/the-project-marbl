@@ -1,4 +1,5 @@
 import json
+import requests
 from front_end.Session import Session
 from front_end.FirebaseConnection import FirebaseConnection
 from front_end.User import User
@@ -20,14 +21,14 @@ class SessionManager:
         username = self.database.get_username_from_email(email) or "anon"
         my_user = User(username, "password123", email) #making password field password123 since we probably don't want to store passwords haha
         self.populate_user_with_chats(my_user)
+        self.populate_user_with_friends(my_user)
         print(my_user)
         print(vars(my_user))
         self.existingSession = Session(response['idToken'], response['expiresIn'], response['refreshToken'], response['registered'], response['email'], my_user)
         
         return self.existingSession
-    except Exception as e:
-      if(e.strerror):
-        return json.loads(e.strerror)
+    except requests.HTTPError as e:
+            return json.loads(e.strerror)
   def populate_user_with_chats(self,user_object):
     #get all chats user is in
     chat_ids = self.database.get_chats_by_username(user_object.get_username())
@@ -46,8 +47,10 @@ class SessionManager:
           else:
             user.join_chat(my_chat) #add user to chat if not already in
   def populate_user_with_friends(self,user_object):
-    #todo this
-    pass
+    friends = self.database.get_friends_from_username(user_object.get_username())
+    if(not friends): return
+    for friend in friends:
+      user_object.add_friend(friend)
       
 
   
@@ -56,8 +59,8 @@ class SessionManager:
       response = self.auth.send_password_reset_email(email)
       response["success"] = True
       return response
-    except Exception as e:
-      return json.loads(e.strerror)
+    except requests.HTTPError as e:
+            return json.loads(e.strerror)
     
   def create_account(self, email, password, username, first_name, last_name):
     user = {}
@@ -73,7 +76,7 @@ class SessionManager:
     try:
       user = self.auth.create_user_with_email_and_password(email, password)
       return user
-    except Exception as e:
+    except requests.HTTPError as e:
       self.database.remove_account_data(username)
       return json.loads(e.strerror)
   

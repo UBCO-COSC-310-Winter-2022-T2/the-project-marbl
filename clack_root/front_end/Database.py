@@ -76,7 +76,12 @@ class Database:
         try:
             friends = self.db.child("users").child(username).child("friends").get()
             friends = self.convert_ordered_dict_to_dict(friends.val())
-            return friends
+            friend_list = UserList()
+            if(not friends): return friend_list
+            for friend in friends.keys():
+                friend_list.append(User(friend,"no","no"))
+
+            return friend_list
         except Exception as e:
             print("DATABASE ERROR:", e)
             return None
