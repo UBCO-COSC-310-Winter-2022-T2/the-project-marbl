@@ -314,7 +314,8 @@ class UIMessage(QWidget):
         hud.addWidget(time_stamp)
         self.setLayout(body)
 
-        
+#this down here is for testing purposes should be turned into 
+#white box tests but can be removed or commented out.        
 app = QApplication(sys.argv)
 login_window = ChatInterface()
 login_window.show()
