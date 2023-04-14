@@ -1,7 +1,10 @@
 import pyrebase
 import json
 
+from clack_root.front_end import User
+
 class Session:
+
   def __init__(self,idToken: str, expiry : str, refreshToken: str, isValid: bool, email: str):
     self.idToken = idToken
     self.expiry = expiry
@@ -33,8 +36,8 @@ class Session:
   ##methods
   def getUsernameOfCurrentlyLoggedInUser():
     pass
-  def getCurrentlyLoggedInUser():
-    pass
+  def getCurrentlyLoggedInUser() -> User:
+    return User.User("frank","123", "b@b")
   def Logout():
     pass
   def ResetPassword(newPassword: str):
