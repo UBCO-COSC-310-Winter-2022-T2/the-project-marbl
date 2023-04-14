@@ -21,6 +21,9 @@ class Chat:
 
     def add_message_to_history(self, message) -> None:
         self.message_history.append(message)
+    
+    def set_message_history(self, message_history) -> None:
+        self.message_history = message_history
 
     def add_user_to_chat(self, user) -> None:
         from front_end.User import User

@@ -72,6 +72,9 @@ class Session:
         data_out = json.dumps(my_msg)  # encode object to JSON
         self._mqtt_client.publish("marbl/chats/"+chatid, data_out, 2)
 
+    def subscribe_to_topic(self, topic: str):
+        self._mqtt_client.subscribe(topic)
+    
     def addUserToChat(username: str):
         pass
 

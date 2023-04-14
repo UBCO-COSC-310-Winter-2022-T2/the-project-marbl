@@ -1,4 +1,9 @@
 import json
+import datetime
+from front_end.Message import Message
+from front_end.User import User,UserList
+import traceback
+import sys
 class Database:
     def __init__(self,connection):
         self.db = connection.database()
@@ -71,7 +76,12 @@ class Database:
         try:
             friends = self.db.child("users").child(username).child("friends").get()
             friends = self.convert_ordered_dict_to_dict(friends.val())
-            return friends
+            friend_list = UserList()
+            if(not friends): return friend_list
+            for friend in friends.keys():
+                friend_list.append(User(friend,"no","no"))
+
+            return friend_list
         except Exception as e:
             print("DATABASE ERROR:", e)
             return None
@@ -112,11 +122,45 @@ class Database:
             return None
     
     ######### Chat functions ###########
+    def get_message_objects_from_chat(self,chat_id):
+        try:
+            messages = self.db.child("chats").child(chat_id).child("messages").get()
+            messages = self.convert_ordered_dict_to_dict(messages.val())
+            message_array = []
+            for msg in messages.values():
+                message_array.append(Message(msg["author"],msg["message"],msg["time"]))
+            return message_array
+        except Exception as e:
+            print("DATABASE ERROR:", e)
+            return []
+    def get_user_list_from_chat(self,chat_id):
+        try:
+            users = self.db.child("chats").child(chat_id).child("users").get()
+            users = self.convert_ordered_dict_to_dict(users.val())
+            user_list = UserList()
+            for user in users.keys():
+                user_list.append(User(user,"external_user","external_user"))
+            return user_list
+        except Exception as e:
+            print(traceback.format_exc())
+            print("DATABASE ERROR:", e)
+            return UserList()
     def get_chats_by_username(self,username):
         try:
             chats = self.db.child("users").child(username).child("chats").get()
-            chats = list(self.convert_ordered_dict_to_dict(chats.val()).keys())
-            return chats
+            if(chats.val()):
+                chats = list(self.convert_ordered_dict_to_dict(chats.val()).keys())
+                return chats
+            return []
+        except Exception as e:
+            print(traceback.format_exc())
+            print("DATABASE ERROR:", e)
+            return []
+    def get_chat_info_by_chat_id(self,chat_id):
+        try:
+            chat_info = self.db.child("chats").child(chat_id).get()
+            chat_info = self.convert_ordered_dict_to_dict(chat_info.val())
+            return chat_info
         except Exception as e:
             print("DATABASE ERROR:", e)
             return None
@@ -131,7 +175,7 @@ class Database:
             return False
     def create_group_chat(self,chat_name):
         try:
-            self.db.child("chats").push({"chatname": chat_name})
+            self.db.child("chats").push({"chat_name": chat_name})
             return True
         except Exception as e:
             print("DATABASE ERROR:", e)
@@ -142,6 +186,7 @@ class Database:
             chats = self.convert_ordered_dict_to_dict(chats.val())
             return list(chats.keys())
         except Exception as e:
+            print(traceback.format_exc())
             print("DATABASE ERROR:", e)
             return None
     
