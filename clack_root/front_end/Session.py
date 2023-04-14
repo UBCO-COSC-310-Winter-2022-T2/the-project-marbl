@@ -1,6 +1,6 @@
 import pyrebase
 import json
-from front_end.Getters import getMQTTClient
+
 from front_end.User import User
 import time
 
@@ -14,7 +14,9 @@ class Session:
         self.isValid = isValid
         self.email = email
         self._current_user = current_user
-        self._BROKER = "test.mosquitto.org"
+        from front_end.Getters import getMQTTClient
+        self._mqtt_client = getMQTTClient("test.mosquitto.org", current_user.get_username())
+        
     # getters
 
     def getIdToken(self):
@@ -63,14 +65,12 @@ class Session:
         pass
 
     def SendMessage(self, msg: str, chatid: str):
-        my_mqtt_client = getMQTTClient(
-            self._BROKER, self._current_user.get_username())
         my_msg = {"command": "SENDMSG",
                     "author": self._current_user.get_username(),
                     "time": time.time(),
                     "message": msg}
         data_out = json.dumps(my_msg)  # encode object to JSON
-        my_mqtt_client.publish("marbl/chats/"+chatid, data_out)
+        self._mqtt_client.publish("marbl/chats/"+chatid, data_out, 2)
 
     def addUserToChat(username: str):
         pass

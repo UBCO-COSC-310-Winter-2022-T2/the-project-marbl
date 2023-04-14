@@ -1,4 +1,5 @@
 from front_end.Session import Session
+from front_end.User import User
 import sys
 import paho.mqtt.client as mqtt
 import io
@@ -7,7 +8,7 @@ import time
 _BROKER = "test.mosquitto.org"
 
 
-def _on_message(self, client, userdata, msg):
+def _on_message(client, userdata, msg):
     topic = msg.topic
     m_decode = str(msg.payload.decode('utf-8', 'ignore'))
 
@@ -22,9 +23,9 @@ def _on_message(self, client, userdata, msg):
 
 
 def test_send_message():
-
+    my_user = User("test_username1", "password123", "email@email.com") 
     my_test_session = Session("test", "test", "test",
-                              True, "testemail", "test_username")
+                              True, "testemail", my_user)
     # dummy client (for listening)
     client_name = "marbltestuser"
     client = mqtt.Client(client_name)
@@ -38,9 +39,9 @@ def test_send_message():
     sys.stdout = capturedOutput  # and redirect stdout.
 
     my_test_session.SendMessage("hello world!", "testchatroom")
-    time.sleep(1)  # wait to make sure client gets message
+    time.sleep(2)  # wait to make sure client gets message
 
-    assert "test_username: hello world!" in capturedOutput.getvalue()
+    assert "test_username1: hello world!" in capturedOutput.getvalue()
 
     sys.stdout = sys.__stdout__                     # Reset redirect.
     print('Captured', capturedOutput.getvalue())
