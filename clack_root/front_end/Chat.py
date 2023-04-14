@@ -69,7 +69,7 @@ class ChatList(list):
             raise ValueError('Type Chat only')
 
     def find_chat_by_id(self, id: str) -> Chat:
-        for chat in super(ChatList, self):
+        for chat in self:
             if chat.chat_id == id:
                 return chat
         return None  # type: ignore
