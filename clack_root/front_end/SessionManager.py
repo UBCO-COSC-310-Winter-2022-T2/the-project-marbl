@@ -33,7 +33,7 @@ class SessionManager:
 
     #try to save data about user (checks if username already exists)
     try:
-      self.save_user_data(username, first_name, last_name)
+      self.save_user_data(username, first_name, last_name, email)
     except Exception as e:
       print("DATABASE ERROR:", e)
       return {"error": {"message": str(e)}}
@@ -46,7 +46,7 @@ class SessionManager:
       self.database.remove_account_data(username)
       return json.loads(e.strerror)
   
-  def save_user_data(self, username, first_name, last_name):
+  def save_user_data(self, username, first_name, last_name, email):
     if(len(username) < 3):
         raise Exception("Username must be at least 3 characters long. This really should not happen!")
     if(len(first_name) < 1):
@@ -58,6 +58,7 @@ class SessionManager:
     "status" : True,
     "first_name": first_name,
     "last_name": last_name,
+    "email": email
     }
     # Set the UID key in the database to the user data
     if(self.database.get_username_exists(username)):
