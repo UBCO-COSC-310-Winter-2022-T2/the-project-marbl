@@ -1,7 +1,7 @@
 import json
 from front_end.Session import Session
 from front_end.FirebaseConnection import FirebaseConnection
-
+from front_end.User import User
 class SessionManager:
   def __init__(self):
     self.firebase = FirebaseConnection()
@@ -15,7 +15,9 @@ class SessionManager:
   def sign_in_with_email_and_password(self, email, password): #session expires every hour, refresh with user = auth.refresh(user['refreshToken'])
     try:
       response = self.auth.sign_in_with_email_and_password(email, password)
-      self.existingSession = Session(response['idToken'], response['expiresIn'], response['refreshToken'], response['registered'], response['email'])
+      # TODO: IMPLEMENT WAY TO OBTAIN USERNAME FROM EMAIL GIVEN
+      my_user = User("example_username", "password123", email) #making password field password123 since we probably don't want to store passwords haha
+      self.existingSession = Session(response['idToken'], response['expiresIn'], response['refreshToken'], response['registered'], response['email'], my_user)
       return self.existingSession
     except Exception as e:
       return json.loads(e.strerror)

@@ -2,11 +2,11 @@ from front_end.Getters import getMQTTClient, getSessionManager, getCommandInterf
 
 def test_getMQTTClient():
     # test that getMQTTClient returns the same MQTTClient instance
-    client1 = getMQTTClient('test_host')
-    client2 = getMQTTClient('test_host')
+    client1 = getMQTTClient('test_host', 'testusername')
+    client2 = getMQTTClient('test_host','testusername')
     assert client1 is client2
 
-    client3 = getMQTTClient('')
+    client3 = getMQTTClient('', 'testusername')
     assert client1 is client3
 
 def test_getSessionManager():
