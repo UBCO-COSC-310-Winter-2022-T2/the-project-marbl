@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButto
 from front_end.Getters import getCommandInterface
 import sys
 
+
 class SignupScreen(QWidget):
     def __init__(self, login_screen_to_return):
         super().__init__()
@@ -75,9 +76,3 @@ class SignupScreen(QWidget):
     
     def set_message(self,message):
         self.error_message.setText(message)
-
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    login_window = LoginWindow()
-    login_window.show()
-    sys.exit(app.exec_())

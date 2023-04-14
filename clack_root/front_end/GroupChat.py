@@ -1,4 +1,7 @@
-class GroupChat(chat):
+
+from front_end.Chat import Chat
+
+class GroupChat(Chat):
     def __init__(self, chatId, admin, chatName):
         super().__init__(chatId)
         self.admin = admin

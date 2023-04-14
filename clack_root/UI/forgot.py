@@ -50,9 +50,3 @@ class ForgotPasswordScreen(QWidget):
     def set_message(self,msg):
         self.error_message.setText(msg)
 
-
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    login_window = LoginWindow()
-    login_window.show()
-    sys.exit(app.exec_())
