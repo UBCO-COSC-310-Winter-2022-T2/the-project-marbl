@@ -25,6 +25,7 @@ class ChatInterface(QMainWindow):
     _messages = []
     _chat_rooms = []
     _UI_chats_rooms = []
+    _cur_chat : Chat 
     
     def __init__(self, title="--") -> None:
         '''
@@ -72,6 +73,8 @@ class ChatInterface(QMainWindow):
         of UI objs meesages.
         '''
         self._messages.append(msg)
+        if self._cur_chat != None:#add the new message to history
+            self._cur_chat.add_message_to_history(msg)
         self._UI_messages.append(UIMessage(msg.getAuthor(),msg.getMessage(),msg.getDate()))
        
         
@@ -163,6 +166,9 @@ class ChatInterface(QMainWindow):
         #update little clickable chat rooms
         self._chat_view_layout.removeWidget(self._chat_room_views)
         self._chat_room_views = ScrollableList(self._UI_chats_rooms)
+        
+        #set ref to current chat
+        self._cur_chat = target_chat
         
         #add new list view from new messages 
         self._rebiuld_stack()     
