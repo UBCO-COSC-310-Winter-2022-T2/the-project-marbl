@@ -18,6 +18,7 @@ class User:
         self._friends = UserList()
         self._chats = ChatList()
         self._onlineStatus = False
+        self._pending_requests = []
 
     def verify_password(self, entered_password: str) -> bool:
          return  self._password == entered_password
@@ -119,6 +120,15 @@ class User:
                 return True        
 
         return False
+    
+    def send_friend_request(self, other_user):
+        if other_user in self._friends:
+            print(f"{other_user.name} is already your friend.")
+        elif other_user in self._pending_requests:
+            print(f"A friend request to {other_user.name} is already pending.")
+        else:
+            other_user.pending_requests.append(self)
+            print(f"Sent friend request to {other_user.name}.")
 
 
 class UserList(list):

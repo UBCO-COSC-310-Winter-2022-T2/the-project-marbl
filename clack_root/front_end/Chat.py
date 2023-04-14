@@ -12,7 +12,7 @@ class Chat:
         self.message_history = []
 
     def get_message_history(self) -> list:
-        return None # type: ignore
+        return self.message_history
 
     def add_message_to_history(self, message) -> None:
         pass

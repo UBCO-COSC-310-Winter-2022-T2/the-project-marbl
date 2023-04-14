@@ -60,10 +60,10 @@ class LoginWindow(QWidget):
         password = self.password_input.text()
         #implement/connect firebase auth login here
         result = self.command_interface.login(email, password)
-        success = result["success"]
+        success = result["success"] # type: ignore
         if(not success):
             print(result)
-            self.set_message(result["error"]["message"])
+            self.set_message(result["error"]["message"]) # type: ignore
         else:
             #move to main screen
             self.set_message("wooo you logged in! congrats")

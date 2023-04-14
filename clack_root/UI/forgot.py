@@ -43,7 +43,7 @@ class ForgotPasswordScreen(QWidget):
         email = self.email_input.text()
         result = self.command_interface.forgot_password(email)
         if("error" in result):
-            self.set_message(result["error"]["message"])
+            self.set_message(result["error"]["message"]) # type: ignore
         else:
             self.set_message("Email has been sent!")
 
