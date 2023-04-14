@@ -9,7 +9,7 @@ class SessionManager:
     self.database = self.firebase.get_database_connection()
     self.existingSession = None
 
-  def get_existing_session(self):
+  def get_existing_session(self): 
     return self.existingSession
   
   def sign_in_with_email_and_password(self, email, password): #session expires every hour, refresh with user = auth.refresh(user['refreshToken'])

@@ -32,6 +32,9 @@ test/test_front_end/Test_Session.py
 test/test_front_end/Test_SessionManager.py
 test/test_front_end/Test_User.py
 test/test_front_end/__init__.py
+test/test_front_end/test_Chat/Test_Chat.py
+test/test_front_end/test_Chat/Test_ChatList.py
+test/test_front_end/test_Chat/__init__.py
 test/test_listener_server/Test_listener_server_mqtt.py
 test/test_listener_server/__init__.py
 test/test_util/Test_UserList.py

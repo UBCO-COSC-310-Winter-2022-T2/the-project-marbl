@@ -8,9 +8,10 @@ from front_end.Session import Session
 from front_end.Getters import getMQTTClient
 from front_end.Getters import getSessionManager
 import time
+from front_end.Chat import Chat
 
 
-def test_send_receive_message():
+def test_login_send_receive_message():
     # NOTE: once sign_in_with_email_and_password is implemented properly with User being given a proper username, this will need to be changed so the username corresponding with paswordis123456@test.com is the same
 
     # first login for a user
@@ -24,7 +25,16 @@ def test_send_receive_message():
 
     # subscribe user to chat
     mySession.subscribe_to_topic('marbl/chats/test_chat_room')
-
+    
+    # get current user
+    myUser = mySession.getCurrentUser()
+    assert myUser is not None
+    
+    # manually create chat in the client session (eventually won't need to do once the program automatically pulls from database)
+    myChat = Chat('test_chat_room')
+    myChat.add_user_to_chat(myUser)
+    myUser.get_chats().append(myChat)
+    
     # send the chat
     mySession.SendMessage("erg", 'test_chat_room')
 
@@ -32,8 +42,8 @@ def test_send_receive_message():
     time.sleep(2)
 
     # now check to see that the user recieved it
-    myUser = mySession.getCurrentUser()
     myChat = myUser.get_chats().find_chat_by_id('test_chat_room')
+    assert myChat is not None
     string_of_all_msgs = ''
     for msg in myChat.get_message_history():
         string_of_all_msgs = string_of_all_msgs + msg.getMessage()

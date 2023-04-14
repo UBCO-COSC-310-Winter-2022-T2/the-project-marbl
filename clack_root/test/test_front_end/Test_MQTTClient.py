@@ -1,6 +1,7 @@
 import pytest
 from front_end.MQTTClient import MQTTClient
 
+
 def test_start_connection():
     # set up the MQTT client object
     client = MQTTClient('test.mosquitto.org', "testusername")
@@ -31,3 +32,4 @@ def test_publish():
     assert client.publish('test_chat', 'test message', 0) == True
     #assert client.publish('test_chat', '', 0) == False
     assert client.publish('', 'hello', 0) == False
+
