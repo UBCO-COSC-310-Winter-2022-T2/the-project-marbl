@@ -12,8 +12,7 @@ from front_end.Chat import Chat
 
 
 def test_login_send_receive_message():
-    # NOTE: once sign_in_with_email_and_password is implemented properly with User being given a proper username, this will need to be changed so the username corresponding with paswordis123456@test.com is the same
-
+    
     # first login for a user
     mySM = getSessionManager()
     response1 = mySM.sign_in_with_email_and_password(
@@ -30,7 +29,7 @@ def test_login_send_receive_message():
     myUser = mySession.getCurrentUser()
     assert myUser is not None
     
-    # manually create chat in the client session (eventually won't need to do once the program automatically pulls from database)
+    # manually create chat in the client session (NOTE: eventually won't need to do once the program automatically pulls from database)
     myChat = Chat('test_chat_room')
     myChat.add_user_to_chat(myUser)
     myUser.get_chats().append(myChat)
