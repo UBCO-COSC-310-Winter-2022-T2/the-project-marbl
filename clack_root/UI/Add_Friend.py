@@ -1,4 +1,5 @@
 from PyQt5.QtWidgets import QApplication, QLabel, QLineEdit, QPushButton, QVBoxLayout, QWidget
+import sys
 
 class AddFriendWindow(QWidget):
     def __init__(self):
