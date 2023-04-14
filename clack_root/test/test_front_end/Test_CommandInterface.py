@@ -1,12 +1,16 @@
 from unittest.mock import MagicMock, patch
 from front_end.Session import Session
 from front_end.Getters import getCommandInterface
+from front_end.User import User
 
 def test_login():
     example_fail_message = {'error': {'code': 400, 'errors': [{'domain': 'global', 'message': 'EMAIL_EXISTS', 'reason': 'invalid'}], 'message': 'EMAIL_EXISTS'}}
     def mock_func(username, password):
-        if(username == 'valid@valid.com' and password == 'valid'):
-            return Session("idtoken", "expiry", "refreshtoken", True, "valid@valid.com")
+        if(username == 'valid@valid.com' and password == 'valid' or username == "passwordis123456@test.com" and password == "123456"):
+            my_user = User("example_username2", "password123", "email@email.com") 
+            s = Session("idtoken", "expiry", "refreshtoken", True, "valid@valid.com", my_user)
+            getCommandInterface().SM.existingSession = s
+            return Session("idtoken", "expiry", "refreshtoken", True, "valid@valid.com", my_user)
         else:
             return example_fail_message
     
@@ -19,7 +23,7 @@ def test_login():
     assert r1 and r1["session"] is not None
 
     assert r2 and r2["success"] == False
-    assert r2 and r2["errorMsg"] is not None
+    assert r2 and r2["error"] is not None
 
 
 def test_register():
