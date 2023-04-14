@@ -24,11 +24,12 @@ class SessionManager:
             if ("email" in response and response["email"] == email):
                 username = self.database.get_username_from_email(
                     email) or "anon"
-                # making password field password123 since we probably don't want to store passwords haha
+                if(username == "anon"):
+                    print("User does not exist in database, they are probably an old account. Functions may not work properly.")
                 my_user = User(username, "password123", email)
                 self.populate_user_with_chats(my_user)
                 self.populate_user_with_friends(my_user)
-                print(my_user)
+                print("User object created:")
                 print(vars(my_user))
                 self.existingSession = Session(
                     response['idToken'], response['expiresIn'], response['refreshToken'], response['registered'], response['email'], my_user)
