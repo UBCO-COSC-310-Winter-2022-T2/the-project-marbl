@@ -28,6 +28,20 @@ class Database:
         except Exception as e:
             print("DATABASE ERROR:", e)
             return None
+    
+    def get_username_from_email(self, email: str):
+        try:
+            #loop through all users
+            for user in self.db.child("users").get().each():
+                if("email" in self.convert_ordered_dict_to_dict(user.val())):
+                    this_email = self.convert_ordered_dict_to_dict(user.val())["email"]
+                    username = user.key()
+                    if(this_email == email):
+                        return username
+            return None
+        except Exception as e:
+            print("DATABASE ERROR:", e)
+            return None
 
     def add_to_friends_list(self, adding_username1, added_username2):
         if (len(adding_username1) < 3 or len(added_username2) < 3):
@@ -77,7 +91,7 @@ class Database:
             self.db.child("users").child(username).set(data)
             return True
         except Exception as e:
-            print("DATABASE ERROR:", e)
+            print("create_user_with_data error:", e)
             return False
     
     def set_status_by_username(self,username : str, state : bool):

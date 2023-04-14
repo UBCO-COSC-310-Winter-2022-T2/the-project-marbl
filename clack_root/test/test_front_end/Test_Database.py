@@ -13,6 +13,12 @@ def test_get_user_info():
 
     assert db.get_info_from_username('test_user') is not None
 
+def test_get_username_from_email():
+    pyrebase.initialize_app = Mock()
+    db = get_firebase_connection().get_database_connection().db
+
+    assert db.get_username_from_email('test_user') is not None
+
 def test_add_to_friends_list():
     pyrebase.initialize_app = Mock()
     db = get_firebase_connection().get_database_connection().db

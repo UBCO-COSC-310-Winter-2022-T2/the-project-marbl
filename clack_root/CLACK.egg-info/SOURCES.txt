@@ -28,6 +28,7 @@ test/test_front_end/Test_FirebaseConnection.py
 test/test_front_end/Test_Getters.py
 test/test_front_end/Test_MQTTClient.py
 test/test_front_end/Test_Message.py
+test/test_front_end/Test_Session.py
 test/test_front_end/Test_SessionManager.py
 test/test_front_end/Test_User.py
 test/test_front_end/__init__.py
