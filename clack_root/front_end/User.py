@@ -18,6 +18,7 @@ class User:
         self._friends = UserList()
         self._chats = ChatList()
         self._onlineStatus = False
+        self.pending_requests = []
 
     def verify_password(self, entered_password: str) -> bool:
          return  self._password == entered_password
@@ -70,23 +71,15 @@ class User:
                 return False
         self._friends.append(peep)
         return True
-            
-        
-    def remove_friend(self, user) -> bool:
-        '''
-        #### returns     
-        false if user does not exist
-        '''
-        if(isinstance(user, User) == False):
-            raise TypeError("only take in User type")
-        peep : User = user
-
-        for frnd in self._friends:
-            usr : User = frnd
-            if(usr.get_username() == peep.get_username()):
-                self._friends.remove(peep)
-                return True
-        return False
+    
+    def send_friend_request(self, other_user):
+        if other_user in self.friends:
+            print(f"{other_user.name} is already your friend.")
+        elif other_user in self.pending_requests:
+            print(f"A friend request to {other_user.name} is already pending.")
+        else:
+            other_user.pending_requests.append(self)
+            print(f"Sent friend request to {other_user.name}.")
 
 
     def join_chat(self, chat : Chat) -> bool:
