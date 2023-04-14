@@ -122,26 +122,13 @@ class Database:
             return None
     
     ######### Chat functions ###########
-
-    def send_message_to_chat(self,chat_id,username,message):
-        try:
-            message_data = {
-                "author": username,
-                "message": message,
-                "time": str(datetime.datetime.now())
-            }
-            self.db.child("chats").child(chat_id).child("messages").push(message_data)
-            return True
-        except Exception as e:
-            print("DATABASE ERROR:", e)
-            return False
     def get_message_objects_from_chat(self,chat_id):
         try:
             messages = self.db.child("chats").child(chat_id).child("messages").get()
             messages = self.convert_ordered_dict_to_dict(messages.val())
             message_array = []
             for msg in messages.values():
-                message_array.append(Message(msg["author"],msg["message"]))
+                message_array.append(Message(msg["author"],msg["message"],msg["time"]))
             return message_array
         except Exception as e:
             print("DATABASE ERROR:", e)
