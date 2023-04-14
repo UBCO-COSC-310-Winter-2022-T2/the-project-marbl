@@ -2,6 +2,7 @@ import json
 from front_end.Session import Session
 from front_end.FirebaseConnection import FirebaseConnection
 from front_end.User import User
+from front_end.Chat import Chat
 class SessionManager:
   def __init__(self):
     self.firebase = FirebaseConnection()
@@ -18,11 +19,33 @@ class SessionManager:
       if("email" in response and response["email"] == email):
         username = self.database.get_username_from_email(email) or "anon"
         my_user = User(username, "password123", email) #making password field password123 since we probably don't want to store passwords haha
+        self.populate_user_with_chats(my_user)
+        print(my_user)
+        print(vars(my_user))
         self.existingSession = Session(response['idToken'], response['expiresIn'], response['refreshToken'], response['registered'], response['email'], my_user)
+        
         return self.existingSession
     except Exception as e:
       if(e.strerror):
         return json.loads(e.strerror)
+  def populate_user_with_chats(self,user_object):
+    #get all chats user is in
+    chat_ids = self.database.get_chats_by_username(user_object.get_username())
+    if(not chat_ids): return
+    for chat_id in chat_ids:
+      data = self.database.get_chat_info_by_chat_id(chat_id)
+      if(data):
+        chat_name = data["chat_name"]
+        my_chat = Chat(chat_id, chat_name) #create chat object from each
+        all_messages = self.database.get_message_objects_from_chat(chat_id)
+        my_chat.set_message_history(all_messages) #set message history of chat
+        my_chat.set_user_list(self.database.get_user_list_from_chat(chat_id)) #set user list of chat
+        user_object.join_chat(my_chat) # user joins chat
+  def populate_user_with_friends(self,user_object):
+    #todo this
+    pass
+      
+
   
   def forgot_password(self, email):
     try:
