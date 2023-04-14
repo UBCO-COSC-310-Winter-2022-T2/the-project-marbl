@@ -6,8 +6,10 @@ from front_end.User import User
 def test_login():
     example_fail_message = {'error': {'code': 400, 'errors': [{'domain': 'global', 'message': 'EMAIL_EXISTS', 'reason': 'invalid'}], 'message': 'EMAIL_EXISTS'}}
     def mock_func(username, password):
-        if(username == 'valid@valid.com' and password == 'valid'):
+        if(username == 'valid@valid.com' and password == 'valid' or username == "passwordis123456@test.com" and password == "123456"):
             my_user = User("example_username2", "password123", "email@email.com") 
+            s = Session("idtoken", "expiry", "refreshtoken", True, "valid@valid.com", my_user)
+            getCommandInterface().SM.existingSession = s
             return Session("idtoken", "expiry", "refreshtoken", True, "valid@valid.com", my_user)
         else:
             return example_fail_message
