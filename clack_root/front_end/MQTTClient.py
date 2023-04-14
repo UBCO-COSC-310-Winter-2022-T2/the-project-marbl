@@ -1,7 +1,7 @@
 import paho.mqtt.client as mqtt
 import json
 from front_end.User import User
-
+from front_end.Message import Message
 
 class MQTTClient:
     def __init__(self, broker_url, client_name):
@@ -55,8 +55,11 @@ class MQTTClient:
         if currSession is not None: #if there is an existing session (as you probably don't want to recieve chat if not logged in)
             currUser = currSession.getCurrentUser()
             currChats = currUser.get_chats()
-            #currChat = 
+            currChat = currChats.find_chat_by_id(chatroom)
+            theMessage = Message(msg_json["message"], msg_json["author"], msg_json["time"])
+            currChat.add_message_to_history(theMessage)
             #update UI somehow
+            # UI.notify_of_new_message(chatroomid)
         
     def _on_message(self, client, userdata, msg):
         topic = msg.topic
@@ -67,8 +70,8 @@ class MQTTClient:
         command = msg_json["command"]
         match command:
             case "SENDMSG":
-                # parse chatroom from topic (take off the marbl/ part)
-                chatroom = topic[6:]
+                # parse chatroom from topic (take off the marbl/chats/ part)
+                chatroom = topic[12:]
                 # remove command from the rest of the message and pass it on
                 del msg_json["command"]
                 self._process_command_sendmsg(msg_json, chatroom)

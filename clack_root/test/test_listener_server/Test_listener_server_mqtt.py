@@ -89,7 +89,7 @@ def test_SENDMSG_command():
     capturedOutput = io.StringIO()                  # Create StringIO object
     sys.stdout = capturedOutput                     #  and redirect stdout.
     
-    client.publish("marbl/testchatroom", data_out) 
+    client.publish("marbl/chats/testchatroom", data_out) 
     time.sleep(1) # wait to make sure server gets message
     
     assert "John sent a message in testchatroom at time 1230984.4839205" in capturedOutput.getvalue()

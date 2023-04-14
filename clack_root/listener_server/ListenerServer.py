@@ -95,8 +95,8 @@ class ListenerServer:
     command = msg_json["command"]
     match command:
       case "SENDMSG":
-        #parse chatroom from topic (take off the marbl/ part)
-        chatroom = topic[6:] 
+        #parse chatroom from topic (take off the marbl/chats/ part)
+        chatroom = topic[12:] 
         del msg_json["command"] #remove command from the rest of the message and pass it on
         self._process_command_sendmsg(msg_json, chatroom)
       case _:
