@@ -24,6 +24,7 @@ class ChatInterface(QMainWindow):
     _UI_messages = []
     _messages = []
     _chats = []
+    _UI_chats = []
     
     def __init__(self, title="--") -> None:
         '''
@@ -34,9 +35,9 @@ class ChatInterface(QMainWindow):
         self._title = title
         self.setWindowTitle(self._title)
         self.setFixedSize(900,600)
-        #set base layout
-        
-        self._pageLayout = QHBoxLayout()        
+        #set base layout        
+        self._pageLayout = QHBoxLayout() 
+        self._pageLayout#need to figure out how to limit size 
         self._chat_view_layout = QVBoxLayout()
        
         self._pageLayout.addLayout(self._chat_view_layout)
@@ -66,7 +67,8 @@ class ChatInterface(QMainWindow):
         '''
         add a set of meesage and transform them to UI object
         
-        '''       
+        '''  
+        self._UI_messages.clear()     
         if( len(messages) == 0 or messages == None): # type: ignore
             raise InterruptedError("messages passed is ither null or empty")
            
@@ -74,6 +76,32 @@ class ChatInterface(QMainWindow):
             if isinstance(msg, Message) == True:
                 msg: Message = msg
                 self._UI_messages.append(UIMessage(msg.getAuthor(),msg.getMessage(),msg.getDate()))  
+    
+    
+    
+    def add_chat(self, chat : Chat):
+        '''
+        adds chat to Ui chat display
+        '''
+        self._UI_chats.append(UIChat(chat))
+        
+        
+        
+         
+    def set_chats(self, chats :list):
+        '''
+        set chats to be displayed to user
+        '''
+        self._UI_chats.clear()
+        if( len(chats) == 0 or chats == None): # type: ignore
+            raise InterruptedError("messages passed is ither null or empty")
+           
+        for msg in chats:
+            if isinstance(msg, Chat) == True:
+                msg: Chat = msg
+                self._UI_chats.append(UIChat(msg))  
+    
+    
     
     def _rebiuld_stack(self):
         '''
@@ -83,10 +111,13 @@ class ChatInterface(QMainWindow):
         #clear all widgets
         self._chat_view_layout.removeWidget(self._listViewMessages)
         self._chat_view_layout.removeWidget(self.userinput)
+        self._pageLayout.removeWidget(self._chat_views)
         
         #add them all back in
+        self._pageLayout.insertWidget(0,self._chat_views)
         self._chat_view_layout.addWidget(self._listViewMessages)
         self._chat_view_layout.addWidget(self.userinput)
+        
         widget = QWidget()       
         widget.setLayout(self._pageLayout)
         self.setCentralWidget(widget)
@@ -96,9 +127,19 @@ class ChatInterface(QMainWindow):
         '''
         closes window
         '''
-        self.close()
+        self.close()    
+    def _change_chat(self, chats :list):
+        self._UI_chats.clear()
+        self._chats.clear()
         
-    def changeChat(self, target_chat : Chat):
+        self._chats = chats
+        self.set_chats(self._chats)
+        
+        self._pageLayout.removeWidget(self._chat_views)
+        self._chat_views = ScrollableList(self._UI_chats)
+        
+        
+    def change_chat(self, target_chat : Chat):
         '''
         changes the view history of the chat with a new view history
         '''
@@ -113,17 +154,27 @@ class ChatInterface(QMainWindow):
         #remove old list view widget
         self._chat_view_layout.removeWidget(self._listViewMessages)
         self._listViewMessages = ScrollableList(self._UI_messages)
+        #update little clickable chat rooms
+       
+        
         #add new list view from new messages 
         self._rebiuld_stack()     
 
         
 class UIChat(QWidget):
-    from PyQt5.QtWidgets import QPushButton
+   
     def __init__(self, chat : Chat) -> None:
-         super(UIChat,self).__init__()
-         self._layout = QHBoxLayout()
-         self.setMaximumSize(200,50)
-         self.chat_btn = QPushButton()
+        super(UIChat,self).__init__()
+        from PyQt5.QtWidgets import QPushButton
+        self._layout = QHBoxLayout()
+        self.setMaximumSize(200,50)
+        self.chat_btn = QPushButton()
+        self.chat_btn.setText(chat.chat_name)
+        self.chat_btn.clicked.connect(self.on_click) 
+        
+    def on_click(self):
+        #over write me
+        pass
 
 class ScrollableList(QWidget):
     '''
@@ -204,11 +255,12 @@ app = QApplication(sys.argv)
 login_window = ChatInterface()
 login_window.show()
 
-# chat = Chat(2,"yolo")
-# chat.message_history.append(Message("yolo",User("sally","123","emial@hot")))
-# chat.message_history.append(Message("yolo",User("sally","123","emial@hot")))
-# print(len(chat.message_history))
-# login_window.changeChat(chat)
+chat = Chat(2,"yolo")
+login_window.add_chat(chat=chat)
+chat.message_history.append(Message("yolo",User("sally","123","emial@hot")))
+chat.message_history.append(Message("yolo",User("sally","123","emial@hot")))
+print(len(chat.message_history))
+login_window.change_chat(chat)
 sys.exit(app.exec_())
 
         
