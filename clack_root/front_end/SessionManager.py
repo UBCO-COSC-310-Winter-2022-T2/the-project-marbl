@@ -33,7 +33,10 @@ class SessionManager:
                 print(vars(my_user))
                 self.existingSession = Session(
                     response['idToken'], response['expiresIn'], response['refreshToken'], response['registered'], response['email'], my_user)
-
+                
+                # subscribe users to the chats they're in
+                self.existingSession.update_subscriptions()
+                
                 return self.existingSession
         except requests.HTTPError as e:
             return json.loads(e.strerror)
@@ -47,8 +50,8 @@ class SessionManager:
         for chat_id in chat_ids:
             data = self.database.get_chat_info_by_chat_id(chat_id)
             if (data):
-                chat_name = data["chat_name"]
-                my_chat = Chat(chat_id, chat_name)  # create chat object
+                
+                my_chat = Chat(chat_id)  # create chat object
                 all_messages = self.database.get_message_objects_from_chat(
                     chat_id)
                 # set message history of chat
