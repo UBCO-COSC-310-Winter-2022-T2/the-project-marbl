@@ -1,0 +1,2 @@
+[console_scripts]
+start = UI.main:main
