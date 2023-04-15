@@ -50,8 +50,8 @@ class SessionManager:
         for chat_id in chat_ids:
             data = self.database.get_chat_info_by_chat_id(chat_id)
             if (data):
-                
-                my_chat = Chat(chat_id)  # create chat object
+                chat_name = data["chat_name"]
+                my_chat = Chat(chat_id, chat_name)  # create chat object
                 all_messages = self.database.get_message_objects_from_chat(
                     chat_id)
                 # set message history of chat
