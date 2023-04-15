@@ -1,5 +1,8 @@
 
-# LINK TO OUR VIDEO: https://www.youtube.com/watch?v=wgfr6D-bF_s&feature=youtu.be
+## LINK TO OUR VIDEO: https://www.youtube.com/watch?v=wgfr6D-bF_s&feature=youtu.be
+
+## LINK TO OUR SEND MESSAGE VIDEO (added after deadline, just to show what we had): https://www.youtube.com/watch?v=U14W2u4t_ks
+
 # General Development:
 
  ### **What did your team build? Is it feature complete and running?**
