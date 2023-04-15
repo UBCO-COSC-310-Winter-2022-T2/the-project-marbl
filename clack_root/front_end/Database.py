@@ -175,11 +175,11 @@ class Database:
             return False
     def create_group_chat(self,chat_name):
         try:
-            self.db.child("chats").push({"chat_name": chat_name})
-            return True
+            chatid = self.db.child("chats").push({"chat_name": chat_name})
+            return chatid
         except Exception as e:
             print("DATABASE ERROR:", e)
-            return False
+            return None 
     def get_all_group_chats(self):
         try:
             chats = self.db.child("chats").get()
