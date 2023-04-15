@@ -21,12 +21,10 @@ from front_end.Getters import get_firebase_connection
 
 
 class ChatInterface(QMainWindow):
+
     '''
     main Window body holds text promt and message hisotory and otehr chats aviable to click
-    '''
-    
-    
-    
+    '''   
     _title : str  
     _UI_messages = []
     _messages = []
@@ -34,7 +32,13 @@ class ChatInterface(QMainWindow):
     _UI_chats_rooms = []
     _cur_chat : Chat = None # type: ignore
     _instance = None
-
+    _list_view_messages = None
+    _chat_room_views = None
+    userinput = None
+    _chat_view_layout : QVBoxLayout
+    _pageLayout : QHBoxLayout
+    _us : User 
+    
     def __init__(self, title="--") -> None:
         '''
         create a empty chat window
@@ -42,18 +46,19 @@ class ChatInterface(QMainWindow):
         super().__init__()
         if(self._instance != None):
             raise ReferenceError("use instance() instead")
-                        
+        
+        print("------chat interface initailized-------------")                
         self._instance = self
         self._session = getSessionManager().get_existing_session()
-        
+        if self._session != None:
+            self._us = self._session.getCurrentUser() #type: ignore 
         
         #default param
         self._title = title
         self.setWindowTitle(self._title)
         self.setFixedSize(900,600)
         #set base layout        
-        self._pageLayout = QHBoxLayout() 
-        self._pageLayout#need to figure out how to limit size 
+        self._pageLayout = QHBoxLayout()         
         self._chat_view_layout = QVBoxLayout()
        
         self._pageLayout.addLayout(self._chat_view_layout)
@@ -64,16 +69,11 @@ class ChatInterface(QMainWindow):
         #get and set chat rooms user has avaible 
         #get and intialize a chat if needed.
         if self._session != None:
-            self.set_chats_rooms(self._session.getCurrentUser().get_chats()) # type: ignore
-            if len(self._session.getCurrentUser().get_chats()) != 0: # type: ignore
-                self.change_cur_chat(self._session.getCurrentUser().get_chats()[0])    # type: ignore
-
-        #end of stuff to remove
-        
-        #set vars would remove because only should not carry insstance data 
-        #from backend yolo.
-        self.set_messages(self._messages)
-        self.set_chats_rooms(self._chat_rooms)     
+            self.set_chats_rooms(self._session.getCurrentUser().get_chats()) 
+            if len(self._session.getCurrentUser().get_chats()) != 0: 
+                self.change_cur_chat(self._session.getCurrentUser().get_chats()[0])   
+                self.set_messages(self._cur_chat.get_message_history())
+           
 
         self.userinput = UserInputBox(self)         
         self._chat_room_views =  ScrollableList(self._UI_chats_rooms)
@@ -97,8 +97,8 @@ class ChatInterface(QMainWindow):
         '''
         self._messages.append(msg)
         #possibly save to db 
-        if self._cur_chat != None:#add the new message to history
-            self._cur_chat.add_message_to_history(msg)
+        # if self._cur_chat != None:#add the new message to history
+        #     self._cur_chat.add_message_to_history(msg)
         self._UI_messages.append(UIMessage(msg.getAuthor(),msg.getMessage(),msg.getDateTime()))
        
         
@@ -151,7 +151,9 @@ class ChatInterface(QMainWindow):
         '''
         rebiulds window with updated info
         possible better way using a actaul stack
+        
         '''
+        print("----rebiudling stack------")
         #clear all widgets
         self._chat_view_layout.removeWidget(self._list_view_messages)
         self._chat_view_layout.removeWidget(self.userinput)
@@ -190,6 +192,8 @@ class ChatInterface(QMainWindow):
         self.set_messages(self._messages)
         
         #remove old list view widget
+        print("----------------------changed chat--------------------------")
+        
         self._chat_view_layout.removeWidget(self._list_view_messages)
         self._list_view_messages = ScrollableList(self._UI_messages)
         #update little clickable chat rooms
@@ -200,7 +204,8 @@ class ChatInterface(QMainWindow):
         self._cur_chat = target_chat
         
         #add new list view from new messages 
-        self._rebiuld_stack()     
+        #self._rebiuld_stack()   
+        self.update()  
 
     def update_UI(self):
         '''
@@ -208,8 +213,9 @@ class ChatInterface(QMainWindow):
         then create UI objects from them and displays them
         '''
         #get new history from chat
-        self.set_chats_rooms(self._chat_rooms)
-        self.set_messages(self._messages)
+        
+        self.set_chats_rooms(self._session.getCurrentUser().get_chats()) #type: ignore
+        self.set_messages(self._cur_chat.get_message_history())
         #remove old list view widget
         self._chat_view_layout.removeWidget(self._list_view_messages)
         self._list_view_messages = ScrollableList(self._UI_messages)
@@ -245,8 +251,9 @@ class UIChat(QWidget):
         
     def on_click(self):
         #over write me
-        self._main_window._title = self._cur_chat.chat_name
-        self._main_window.change_cur_chat(self._cur_chat)
+        if self._main_window._title != self._cur_chat.chat_name:
+            self._main_window._title = self._cur_chat.chat_name
+            self._main_window.change_cur_chat(self._cur_chat)
         pass
 
 class ScrollableList(QWidget):
@@ -288,15 +295,10 @@ class Color(QWidget):
 class UserInputBox(QWidget):
     '''
     custom widget that simulates a user input text box
-    '''
-
-    
+    '''    
     def __init__(self, mainWindow : ChatInterface ) -> None:
         super(UserInputBox,self).__init__()
         from PyQt5.QtWidgets import QHBoxLayout, QLineEdit, QPushButton
-
-
-
 
         self._main_window = mainWindow 
         self.session =  getSessionManager().get_existing_session()
@@ -341,10 +343,11 @@ class UserInputBox(QWidget):
         
         if self.session != None or not self.input.text().__contains__("/"):
             self.session.SendMessage(self.input.text(), self._main_window._cur_chat.chat_id) # type: ignore
-            # msg : Message = Message(author=self.session.getCurrentUser(),message=self.input.text())
-            # self._main_window.add_Message(msg)
+            #msg : Message = Message(author=self.session.getCurrentUser().get_username(),message=self.input.text()) # type: ignore
+            #self._main_window.add_Message(msg)
             self.input.setText("")
-            self._main_window.update_UI()
+            #self._main_window.update_UI()
+           
         #send message to other participants 
         
         
@@ -353,16 +356,17 @@ class UserInputBox(QWidget):
 class UIMessage(QWidget):
    '''
    UI object reperstenation of Message
-   '''
+   '''   
+   
     
-   def __init__(self, user : User, message_txt :str = "none",date : datetime=datetime.now()): 
+   def __init__(self, user : str, message_txt :str = "none",date : datetime=datetime.now()): 
         super(UIMessage,self).__init__()      
         from PyQt5.QtWidgets import QLabel, QHBoxLayout
         body = QVBoxLayout()
         hud = QHBoxLayout()        
         
         message = QLabel(message_txt)
-        user = QLabel(user.get_username())
+        user = QLabel(user)
         time_stamp = QLabel(date.strftime("%d/%m/%Y, %H:%M:%S")) 
        
         body.addLayout(hud)

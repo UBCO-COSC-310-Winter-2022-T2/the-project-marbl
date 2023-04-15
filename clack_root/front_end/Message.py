@@ -1,16 +1,16 @@
 import time
 from datetime import datetime
-from front_end.User import User
+
 
 class Message:
     '''
     Holds instance data for client as a object for ui to display
     '''
-    _author : User
+    _author : str
     _time : float  
     _message :str
     
-    def __init__(self, message: str, author : User, time: float = time.time()): 
+    def __init__(self, message: str, author : str, time: float): 
         '''
         create new message object with date initailizeing upon creating the object
         '''
@@ -30,8 +30,10 @@ class Message:
     def getDateTime(self) -> datetime:
         return datetime.fromtimestamp(self._time)
 
-    def getAuthor(self) -> User:
+    def getAuthor(self) -> str:
         return self._author
+
+        
 
     def setMessage(self, message: str) -> None:
         self._message = message

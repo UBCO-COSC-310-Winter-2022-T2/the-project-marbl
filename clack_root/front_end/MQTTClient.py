@@ -5,6 +5,7 @@ from front_end.Message import Message
 
 
 class MQTTClient:
+   
     def __init__(self, broker_url, client_name):
         self.broker_url = broker_url
         self.client = mqtt.Client(client_name)
@@ -50,20 +51,23 @@ class MQTTClient:
 
 ####### ON MESSAGE STUFF - updates rest of client #################################
     def _process_command_sendmsg(self, msg_json, chatroom: str):
-        print(msg_json["author"] + " sent a message in " +
-              chatroom + " at time " + str(msg_json["time"]))
+        
         currSession = self.mySM.get_existing_session()
         if currSession is not None: #if there is an existing session (as you probably don't want to recieve chat if not logged in)
+            print(msg_json["author"] + " sent a message in " +
+              chatroom + " at time " + str(msg_json["time"]))
             currUser = currSession.getCurrentUser() # type: ignore
             currChats = currUser.get_chats()
             currChat = currChats.find_chat_by_id(chatroom)
             theMessage = Message(msg_json["message"], msg_json["author"], msg_json["time"])
             currChat.add_message_to_history(theMessage)
             #update UI somehow
-            # UI.notify_of_new_message(chatroomid)
-            from UI.chat_interface import ChatInterface
-            UI : ChatInterface = ChatInterface.instance() # type: ignore
-            UI.update_UI()
+            # UI.notify_of_new_message(chatroomid)  
+            print("---upaddted UI")  
+            from clack_root.UI.chat_interface import ChatInterface
+            self.ui_chat : ChatInterface = ChatInterface.instance()         # type: ignore
+            self.ui_chat.update_UI()
+           
         
     def _on_message(self, client, userdata, msg):
         topic = msg.topic
