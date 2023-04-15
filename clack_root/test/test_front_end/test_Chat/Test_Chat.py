@@ -15,7 +15,7 @@ def test_message_history():
 
 def test_add_user_to_chat():
     #create chat
-    mychat = Chat("123")
+    mychat = Chat("123", "default_chat_room")
     
     #add first user to chat
     testUser = User("user1", "password", "email@email.com")
