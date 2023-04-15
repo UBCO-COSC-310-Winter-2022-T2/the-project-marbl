@@ -338,20 +338,25 @@ class UserInputBox(QWidget):
              mydb = mydbconn.get_database_connection()
              if txt.__contains__("/add_friend"):
                  print("friend request sent")
+                 self.input.setText("")
                  return
              elif txt.__contains__("/create"):
                 name = txt.split()
                 mychatid = mydb.create_group_chat(name[1])
                 mydb.add_user_to_group_chat(self.session.getCurrentUser().get_username(), mychatid['name']) # type: ignore
                 print("chat created")
+                self.input.setText("")
                 return
              elif txt.__contains__("/join"):
                  name = txt.split()
                  mydb.add_user_to_group_chat(self.session.getCurrentUser().get_username(), mychatid['name']) # type: ignore
                  print("jioned chat")
+                 self.input.setText("")
                  return
              elif txt.__contains__("/update"):
                   self._main_window.update_UI()
+                  self.input.setText("")
+                  return 
              else:
                  print("command unknown")
                  return
