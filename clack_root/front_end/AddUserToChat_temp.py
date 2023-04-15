@@ -7,5 +7,5 @@ from front_end.Getters import get_firebase_connection
 mydbconn = get_firebase_connection()
 mydb = mydbconn.get_database_connection()
 mychatid = mydb.create_group_chat("default_chat_room")
-mydb.add_user_to_group_chat("example_username2", mychatid['name'])
+mydb.add_user_to_group_chat("example_username2", mychatid['name']) # type: ignore
 

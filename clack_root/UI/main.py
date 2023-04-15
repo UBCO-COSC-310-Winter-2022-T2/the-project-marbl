@@ -1,7 +1,5 @@
 from PyQt5.QtWidgets import QApplication
 from login import LoginWindow
-from signup import SignupScreen
-from forgot import ForgotPasswordScreen
 import sys
 
 if __name__ == "__main__":

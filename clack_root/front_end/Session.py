@@ -1,5 +1,9 @@
 import pyrebase
 import json
+from front_end.User import User
+import time
+
+
 
 from front_end.User import User
 import time
@@ -15,7 +19,7 @@ class Session:
         self.email = email
         self._current_user = current_user
         from front_end.Getters import getMQTTClient
-        self._mqtt_client = getMQTTClient("test.mosquitto.org", current_user.get_username())
+        self._mqtt_client = getMQTTClient("test.mosquitto.org", current_user.get_username()) # type: ignore
         
     # getters
 
@@ -55,13 +59,13 @@ class Session:
         self.email = email
     # methods
 
-    def getUsernameOfCurrentlyLoggedInUser():
+    def getUsernameOfCurrentlyLoggedInUser(): # type: ignore
         pass
 
-    def Logout():
+    def Logout(): # type: ignore
         pass
 
-    def ResetPassword(newPassword: str):
+    def ResetPassword(newPassword: str): # type: ignore
         pass
 
     def SendMessage(self, msg: str, chatid: str):
@@ -73,27 +77,28 @@ class Session:
         self._mqtt_client.publish("marbl/chats/"+chatid, data_out, 2)
 
     def subscribe_to_topic(self, topic: str):
-        self._mqtt_client.subscribe(topic)
-    
+        self._mqtt_client.subscribe(topic)    
+
+    def addUserToChat(username: str): # type: ignore
+        pass
+
+    def kickUserFromChat(username: str): # type: ignore
+        pass
+
+    def transferAdminship(username: str, chat: str): # type: ignore
+        pass
+
+    def createChat(users: str): # type: ignore
+        pass
+
+    def addFriend(username: str): # type: ignore
+        pass
+
+    def removeFriend(username: str):# type: ignore
+        pass
+
     def update_subscriptions(self):
         for chat in self._current_user.get_chats():
             self.subscribe_to_topic("marbl/chats/"+chat.chat_id)
     
-    def addUserToChat(username: str):
-        pass
 
-    def kickUserFromChat(username: str):
-        pass
-
-    def transferAdminship(username: str, chat: str):
-        pass
-
-    def createChat(users: str):
-        pass
-
-    def addFriend(username: str):
-        pass
-
-    def removeFriend(username: str):
-        pass
-      

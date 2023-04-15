@@ -18,6 +18,7 @@ class User:
         from front_end.Chat import ChatList
         self._chats = ChatList()
         self._onlineStatus = False
+       
 
     def verify_password(self, entered_password: str) -> bool:
          return  self._password == entered_password
@@ -120,8 +121,9 @@ class User:
                 chat.users.remove(self)
                 return True        
 
-        return False
-    
+        return False    
+
+
 
 class UserList(list):
     '''

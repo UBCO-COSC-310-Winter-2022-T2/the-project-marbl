@@ -15,7 +15,7 @@ database_instance = None
 def getMQTTClient(host: str, client_name: str) -> MQTTClient:
     global MQTTClient_instance
     if(MQTTClient_instance == None):
-        MQTTClient_instance = MQTTClient(host, client_name)
+        MQTTClient_instance = MQTTClient(host, client_name) # type: ignore
         MQTTClient_instance.start_connection()
     return MQTTClient_instance
 

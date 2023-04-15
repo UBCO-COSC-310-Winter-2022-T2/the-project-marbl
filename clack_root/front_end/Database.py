@@ -41,7 +41,7 @@ class Database:
                 if("email" in self.convert_ordered_dict_to_dict(user.val())):
                     this_email = self.convert_ordered_dict_to_dict(user.val())["email"]
                     username = user.key()
-                    if(this_email == email):
+                    if(this_email.lower() == email.lower()):
                         return username
             return None
         except Exception as e:

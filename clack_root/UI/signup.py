@@ -67,9 +67,9 @@ class SignupScreen(QWidget):
         password = self.password_input.text()
         result = self.command_interface.create_account(email, password, username, first_name, last_name)
         print(result)
-        success = result["success"]
+        success = result["success"] # type: ignore
         if(not success):
-            self.set_message(result["error"]["message"])
+            self.set_message(result["error"]["message"]) # type: ignore
         else:
             self.return_login("Registered '" + email + "' successfully")
     
