@@ -128,7 +128,7 @@ class Database:
             messages = self.convert_ordered_dict_to_dict(messages.val())
             message_array = []
             for msg in messages.values():
-                message_array.append(Message(msg["author"],msg["message"],msg["time"]))
+                message_array.append(Message(msg["message"],msg["author"],msg["time"]))
             return message_array
         except Exception as e:
             print("DATABASE ERROR:", e)
