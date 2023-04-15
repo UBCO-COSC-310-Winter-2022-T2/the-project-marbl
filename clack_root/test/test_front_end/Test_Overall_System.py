@@ -12,6 +12,7 @@ from front_end.Chat import Chat
 from random import choice
 from string import ascii_uppercase
 
+@pytest.mark.first
 def test_login_send_receive_message():
     
     # first login for a user
