@@ -33,7 +33,10 @@ class SessionManager:
                 print(vars(my_user))
                 self.existingSession = Session(
                     response['idToken'], response['expiresIn'], response['refreshToken'], response['registered'], response['email'], my_user)
-
+                
+                # subscribe users to the chats they're in
+                self.existingSession.update_subscriptions()
+                
                 return self.existingSession
         except requests.HTTPError as e:
             return json.loads(e.strerror)

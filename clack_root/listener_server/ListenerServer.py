@@ -40,6 +40,7 @@ class ListenerServer:
   def start_server(self):
     self._start_connection()
     self._subscribe("marbl/#") #subscribe to all topics
+    # time.sleep(10000) # run the server for 10 000 seconds
   
   def _start_connection(self):
         try:

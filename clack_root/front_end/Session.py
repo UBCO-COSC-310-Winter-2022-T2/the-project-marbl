@@ -75,6 +75,10 @@ class Session:
     def subscribe_to_topic(self, topic: str):
         self._mqtt_client.subscribe(topic)
     
+    def update_subscriptions(self):
+        for chat in self._current_user.get_chats():
+            self.subscribe_to_topic("marbl/chats/"+chat.chat_id)
+    
     def addUserToChat(username: str):
         pass
 
