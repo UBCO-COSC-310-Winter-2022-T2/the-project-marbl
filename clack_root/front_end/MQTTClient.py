@@ -2,10 +2,10 @@ import paho.mqtt.client as mqtt
 import json
 from front_end.User import User
 from front_end.Message import Message
-
+from front_end.IObserver import IObserver
 
 class MQTTClient:
-   
+    _Ui_subjects : IObserver 
     def __init__(self, broker_url, client_name):
         self.broker_url = broker_url
         self.client = mqtt.Client(client_name)
@@ -14,7 +14,9 @@ class MQTTClient:
         self.client.on_connect = self.on_connect
         from front_end.Getters import getSessionManager
         self.mySM = getSessionManager()
-        
+     
+    def set_sub(self,listener: IObserver):
+        self._Ui_subjects = listener   
 
     def start_connection(self):
         try:
@@ -63,13 +65,13 @@ class MQTTClient:
             currChat.add_message_to_history(theMessage)
             #update UI somehow
             # UI.notify_of_new_message(chatroomid)  
-            print("---upaddted UI")  
-            from clack_root.UI.chat_interface import ChatInterface
-            self.ui_chat : ChatInterface = ChatInterface.instance()         # type: ignore
-            self.ui_chat.update_UI()
+            
+            print("---upaddted UI")              
+            #self._Ui_subjects.Nofity()
            
         
     def _on_message(self, client, userdata, msg):
+        
         topic = msg.topic
         m_decode = str(msg.payload.decode('utf-8', 'ignore'))
 
@@ -82,6 +84,8 @@ class MQTTClient:
                 chatroom = topic[12:]
                 # remove command from the rest of the message and pass it on
                 del msg_json["command"]
+                print("On_message called")
+                self._Ui_subjects.Nofity()
                 self._process_command_sendmsg(msg_json, chatroom)
             case _:
                 print(command + " is not a valid command")

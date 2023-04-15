@@ -11,6 +11,7 @@ front_end/Database.py
 front_end/FirebaseConnection.py
 front_end/Getters.py
 front_end/GroupChat.py
+front_end/IObserver.py
 front_end/MQTTClient.py
 front_end/Message.py
 front_end/Session.py

@@ -11,8 +11,8 @@ import sys
 from front_end.Message import Message
 from front_end.User import User
 from front_end.Chat import Chat
-from front_end.Getters import getSessionManager
-
+from front_end.Getters import getSessionManager,getMQTTClient
+from front_end.IObserver import IObserver
 from front_end.Getters import get_firebase_connection
 
 
@@ -20,7 +20,7 @@ from front_end.Getters import get_firebase_connection
 
 
 
-class ChatInterface(QMainWindow):
+class ChatInterface(QMainWindow,IObserver):
 
     '''
     main Window body holds text promt and message hisotory and otehr chats aviable to click
@@ -47,11 +47,15 @@ class ChatInterface(QMainWindow):
         if(self._instance != None):
             raise ReferenceError("use instance() instead")
         
-        print("------chat interface initailized-------------")                
+        print("------chat interface initailized-------------")
+        
         self._instance = self
         self._session = getSessionManager().get_existing_session()
+        
         if self._session != None:
             self._us = self._session.getCurrentUser() #type: ignore 
+            self.mqtt = self._session._mqtt_client #type: ignore
+            self.mqtt.set_sub(self)
         
         #default param
         self._title = title
@@ -83,11 +87,23 @@ class ChatInterface(QMainWindow):
     
     def instance(self):
         if self._instance == None:
-            self._instance = self.__init__()
+            self._instance = self.__new__
         return self._instance
-           
+    
+    def Notify(self):
+        super(ChatInterface,self)
+        print("was notified")
+        self.update_UI()
         
-
+           
+    def on_chat_history_changed(self):
+           if self._session != None:
+               if len(self._session.getCurrentUser().get_chats()) != len(self._messages):
+                    self._messages.clear()
+                    for m in self._session.getCurrentUser().get_chats():
+                        self._messages.append(m)
+                    self.set_messages(self._messages)
+                    self.update()
        
         
     def add_Message(self, msg : Message):
@@ -334,6 +350,8 @@ class UserInputBox(QWidget):
                  mydb.add_user_to_group_chat(self.session.getCurrentUser().get_username(), mychatid['name']) # type: ignore
                  print("jioned chat")
                  return
+             elif txt.__contains__("/update"):
+                  self._main_window.update_UI()
              else:
                  print("command unknown")
                  return
@@ -381,21 +399,21 @@ if __name__ == '__main__':
     login_window = ChatInterface("--")
     login_window.show()
     sys.exit(app.exec_())
-# #this down here is for testing purposes should be turned into 
-# #white box tests but can be removed or commented out.        
+#this down here is for testing purposes should be turned into 
+#white box tests but can be removed or commented out.        
 # app = QApplication(sys.argv)
 # login_window = ChatInterface()
 # login_window.show()
 # #example stuffs 
 # chat = Chat(2,"yolo")
 # login_window.add_chat_room(chat=chat)
-# chat.message_history.append(Message("yolo",User("sally","123","emial@hot")))
-# chat.message_history.append(Message("yolo",User("sally","123","emial@hot")))
+# chat.message_history.append(Message("yolo","sally",8987))
+# chat.message_history.append(Message("yolo","sally",909))
 # print(len(chat.message_history))
 # login_window.set_messages(chat.message_history)
 # login_window.set_chats_rooms([chat])
 # login_window.update_UI()
-# login_window.add_Message(Message("yolo",User("sally","123","emial@hot")))
+# login_window.add_Message(Message("yolo","sally",123))
 # login_window.update_UI()
 # sys.exit(app.exec_())
 
