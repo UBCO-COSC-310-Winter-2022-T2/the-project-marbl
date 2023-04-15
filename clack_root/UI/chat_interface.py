@@ -11,7 +11,9 @@ import sys
 from front_end.Message import Message
 from front_end.User import User
 from front_end.Chat import Chat
+from front_end.Getters import getSessionManager
 
+from front_end.Getters import get_firebase_connection
 
 
 
@@ -22,19 +24,29 @@ class ChatInterface(QMainWindow):
     '''
     main Window body holds text promt and message hisotory and otehr chats aviable to click
     '''
-  
+    
+    
+    
     _title : str  
     _UI_messages = []
     _messages = []
     _chat_rooms = []
     _UI_chats_rooms = []
     _cur_chat : Chat = None # type: ignore
-    
+    _instance = None
+
     def __init__(self, title="--") -> None:
         '''
         create a empty chat window
-        '''       
+        '''  
         super().__init__()
+        if(self._instance != None):
+            raise ReferenceError("use instance() instead")
+                        
+        self._instance = self
+        self._session = getSessionManager().get_existing_session()
+        
+        
         #default param
         self._title = title
         self.setWindowTitle(self._title)
@@ -46,16 +58,18 @@ class ChatInterface(QMainWindow):
        
         self._pageLayout.addLayout(self._chat_view_layout)
         
-      #feel free to remove these as they are for testing
-      #or replace them with inital loading data from db?
-        for n in range(0,10):
-           self._messages.append(Message(author=User('bob','123','@uol'), message="hellow world")) 
-        
-        for n in range(0,5):
-            self._chat_rooms.append(Chat(chat_id=2,chat_name="YOlo room"))       
+        #feel free to remove these as they are for testing
+        #or replace them with inital loading data from db?
+    
+        #get and set chat rooms user has avaible 
+        #get and intialize a chat if needed.
+        if self._session != None:
+            self.set_chats_rooms(self._session.getCurrentUser().get_chats()) # type: ignore
+            if len(self._session.getCurrentUser().get_chats()) != 0: # type: ignore
+                self.change_cur_chat(self._session.getCurrentUser().get_chats()[0])    # type: ignore
 
-      #end of stuff to remove
-      
+        #end of stuff to remove
+        
         #set vars would remove because only should not carry insstance data 
         #from backend yolo.
         self.set_messages(self._messages)
@@ -66,7 +80,12 @@ class ChatInterface(QMainWindow):
         self._list_view_messages = ScrollableList(self._UI_messages)
         self._rebiuld_stack()
         self.show()
-       
+    
+    def instance(self):
+        if self._instance == None:
+            self._instance = self.__init__()
+        return self._instance
+           
         
 
        
@@ -80,7 +99,7 @@ class ChatInterface(QMainWindow):
         #possibly save to db 
         if self._cur_chat != None:#add the new message to history
             self._cur_chat.add_message_to_history(msg)
-        self._UI_messages.append(UIMessage(msg.getAuthor(),msg.getMessage(),msg.getDate()))
+        self._UI_messages.append(UIMessage(msg.getAuthor(),msg.getMessage(),msg.getDateTime()))
        
         
         
@@ -91,12 +110,13 @@ class ChatInterface(QMainWindow):
         '''  
         self._UI_messages.clear()     
         if( len(messages) == 0 or messages == None): # type: ignore
-            raise InterruptedError("messages passed is ither null or empty")
+            #do nothing
+            return
            
         for msg in messages:
             if isinstance(msg, Message) == True:
                 msg: Message = msg
-                self._UI_messages.append(UIMessage(msg.getAuthor(),msg.getMessage(),msg.getDate()))  
+                self._UI_messages.append(UIMessage(msg.getAuthor(),msg.getMessage(),msg.getDateTime()))  
        
     
     
@@ -116,7 +136,8 @@ class ChatInterface(QMainWindow):
         '''
         self._UI_chats_rooms.clear()
         if( len(chats) == 0 or chats == None): # type: ignore
-            raise InterruptedError("messages passed is ither null or empty")
+           #do nothing
+           return
            
         for msg in chats:
             if isinstance(msg, Chat) == True:
@@ -268,11 +289,18 @@ class UserInputBox(QWidget):
     '''
     custom widget that simulates a user input text box
     '''
+
     
     def __init__(self, mainWindow : ChatInterface ) -> None:
         super(UserInputBox,self).__init__()
         from PyQt5.QtWidgets import QHBoxLayout, QLineEdit, QPushButton
+
+
+
+
         self._main_window = mainWindow 
+        self.session =  getSessionManager().get_existing_session()
+        
         layout = QHBoxLayout()
         self.input = QLineEdit()
         self.enter_btn = QPushButton('Confirm')
@@ -284,10 +312,39 @@ class UserInputBox(QWidget):
         
     def on_click(self):
         #replace dummy User with Session User
-        msg : Message = Message(author=User("frank","123","b@b"),message=self.input.text())
-        self._main_window.add_Message(msg)
-        self.input.setText("")
-        self._main_window.update_UI()
+        if(self.input.text != ""):
+            if(self.input.text()[0] == '/'):
+            #command detected
+             txt : str = self.input.text()
+             mydbconn = get_firebase_connection()
+             mydb = mydbconn.get_database_connection()
+             if txt.__contains__("/add_friend"):
+                 print("friend request sent")
+                 return
+             elif txt.__contains__("/create"):
+                name = txt.split()
+                mychatid = mydb.create_group_chat(name[1])
+                mydb.add_user_to_group_chat(self.session.getCurrentUser().get_username(), mychatid['name']) # type: ignore
+                print("chat created")
+                return
+             elif txt.__contains__("/join"):
+                 name = txt.split()
+                 mydb.add_user_to_group_chat(self.session.getCurrentUser().get_username(), mychatid['name']) # type: ignore
+                 print("jioned chat")
+                 return
+             else:
+                 print("command unknown")
+                 return
+            #if /add_friend <name of friend> (send freind request)
+            #if /jion <name of chat> (jion chat)
+            
+        
+        if self.session != None or not self.input.text().__contains__("/"):
+            self.session.SendMessage(self.input.text(), self._main_window._cur_chat.chat_id) # type: ignore
+            # msg : Message = Message(author=self.session.getCurrentUser(),message=self.input.text())
+            # self._main_window.add_Message(msg)
+            self.input.setText("")
+            self._main_window.update_UI()
         #send message to other participants 
         
         

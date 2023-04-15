@@ -5,6 +5,11 @@ import time
 
 
 
+from front_end.User import User
+import time
+
+
+
 class Session:
     def __init__(self, idToken: str, expiry: str, refreshToken: str, isValid: bool, email: str, current_user: User):
         self.idToken = idToken
@@ -14,7 +19,11 @@ class Session:
         self.email = email
         self._current_user = current_user
         from front_end.Getters import getMQTTClient
+<<<<<<< HEAD
         self._mqtt_client = getMQTTClient("test.mosquitto.org", current_user.get_username()) # type: ignore
+=======
+        self._mqtt_client = getMQTTClient("test.mosquitto.org", current_user.get_username())
+>>>>>>> 9bfee9b4e3d731ea6392b2b5e074ebbc7369c336
         
     # getters
 
@@ -74,6 +83,7 @@ class Session:
     def subscribe_to_topic(self, topic: str):
         self._mqtt_client.subscribe(topic)
     
+<<<<<<< HEAD
     def addUserToChat(username: str): # type: ignore
         pass
 
@@ -91,5 +101,9 @@ class Session:
 
     def removeFriend(username: str):# type: ignore
         pass
-      
+
+    def update_subscriptions(self):
+        for chat in self._current_user.get_chats():
+            self.subscribe_to_topic("marbl/chats/"+chat.chat_id)
+    
 

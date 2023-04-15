@@ -23,7 +23,7 @@ class SessionManager:
                 email, password)
             if ("email" in response and response["email"] == email):
                 username = self.database.get_username_from_email(
-                    email.lower()) or "anon"
+                    email) or "anon"
                 if(username == "anon"):
                     print("User does not exist in database, they are probably an old account. Functions may not work properly.")
                 my_user = User(username, "password123", email)
@@ -34,6 +34,8 @@ class SessionManager:
                 self.existingSession = Session(
                     response['idToken'], response['expiresIn'], response['refreshToken'], response['registered'], response['email'], my_user) # type: ignore
 
+                # subscribe users to the chats they're in
+                self.existingSession.update_subscriptions() # type: ignore
                 return self.existingSession
         except requests.HTTPError as e:
             return json.loads(e.strerror)

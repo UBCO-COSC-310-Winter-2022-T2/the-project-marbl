@@ -4,7 +4,10 @@ class Chat:
 
     def __init__(self, chat_id, chat_name=""):
         from front_end.User import UserList
-        self.chat_name = chat_name
+        if chat_name == "default_chat_room":
+            self.chat_name = ""
+        else:
+            self.chat_name = chat_name
         self.chat_id = chat_id
         self.users = UserList()
         self.message_history = []

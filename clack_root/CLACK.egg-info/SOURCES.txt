@@ -4,6 +4,7 @@ CLACK.egg-info/SOURCES.txt
 CLACK.egg-info/dependency_links.txt
 CLACK.egg-info/entry_points.txt
 CLACK.egg-info/top_level.txt
+front_end/AddUserToChat_temp.py
 front_end/Chat.py
 front_end/CommandInterface.py
 front_end/Database.py

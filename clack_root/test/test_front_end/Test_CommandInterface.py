@@ -15,15 +15,15 @@ def test_login():
             return example_fail_message
     
     cmd = getCommandInterface()
-    cmd.SM.sign_in_with_email_and_password = mock_func
+    cmd.SM.sign_in_with_email_and_password = mock_func # type: ignore
     r1 = cmd.login('valid@valid.com', 'valid')
     r2 = cmd.login('invalid', 'invalid')
 
-    assert r1 and r1["success"] == True
-    assert r1 and r1["session"] is not None
+    assert r1 and r1["success"] == True # type: ignore
+    assert r1 and r1["session"] is not None # type: ignore
 
-    assert r2 and r2["success"] == False
-    assert r2 and r2["error"] is not None
+    assert r2 and r2["success"] == False # type: ignore
+    assert r2 and r2["error"] is not None # type: ignore
 
 
 def test_register():
@@ -43,12 +43,12 @@ def test_register():
     r4 = cmd.create_account('valid@valid.com', 'valid1','validuser','validfirst','') # fail (last name must be 1+ letters)
     r5 = cmd.create_account('valid@valid.com', 'valid1','validuser','','validlast') # fail (first name must be 1+ letters)
     r6 = cmd.create_account('valid@valid.com', 'valid1','a','validfirst','validlast') # fail (username must be 3+ letters)
-    assert r1 and r1["success"] == True
-    assert r2 and r2["success"] == False
-    assert r3 and r3["success"] == False
-    assert r4 and r4["success"] == False
-    assert r5 and r5["success"] == False
-    assert r6 and r6["success"] == False
+    assert r1 and r1["success"] == True # type: ignore
+    assert r2 and r2["success"] == False # type: ignore
+    assert r3 and r3["success"] == False # type: ignore
+    assert r4 and r4["success"] == False # type: ignore
+    assert r5 and r5["success"] == False # type: ignore
+    assert r6 and r6["success"] == False # type: ignore
 
 
 def test_forgot_password():

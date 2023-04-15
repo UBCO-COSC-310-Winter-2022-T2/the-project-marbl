@@ -19,9 +19,10 @@ class RequestBoard(QMainWindow):
         self._scrollable = ScrollableList([])
 
 class RequestPrompt(QWidget):
-    def __init__(self):
+    def __init__(self, request_from : User):
         super(RequestPrompt,self).__init__()
         self._layout = QHBoxLayout()
+        
         
 if __name__ == '__main__':
     app = QApplication(sys.argv)

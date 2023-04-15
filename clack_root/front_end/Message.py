@@ -7,16 +7,16 @@ class Message:
     Holds instance data for client as a object for ui to display
     '''
     _author : User
-    _date : datetime
+    _time : float  
     _message :str
     
-    def __init__(self, message: str, author : User, date:datetime=datetime.now()): 
-
+    def __init__(self, message: str, author : User, time: float = time.time()): 
         '''
         create new message object with date initailizeing upon creating the object
         '''
+        
         self._message = message
-        self._date = date
+        self._time = time
         self._author = author
     
     
@@ -24,10 +24,11 @@ class Message:
     def getMessage(self) -> str:
         return self._message
 
+    def getDate(self) -> float: 
+        return self._time
 
-    def getDate(self) -> datetime:
-        return self._date
-    
+    def getDateTime(self) -> datetime:
+        return datetime.fromtimestamp(self._time)
 
     def getAuthor(self) -> User:
         return self._author
