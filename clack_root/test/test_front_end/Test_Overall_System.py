@@ -3,7 +3,6 @@ from front_end.User import User
 from front_end.SessionManager import SessionManager
 import pytest
 import pyrebase
-from front_end.Message import Message
 from unittest.mock import patch, Mock
 from front_end.Session import Session
 from front_end.Getters import getMQTTClient
@@ -12,7 +11,6 @@ import time
 from front_end.Chat import Chat
 from random import choice
 from string import ascii_uppercase
-import datetime
 
 def test_login_send_receive_message():
     
@@ -38,14 +36,12 @@ def test_login_send_receive_message():
     # myUser.get_chats().append(myChat)
     
     #test to make sure previous messages were downloaded from database
-    myUser.get_chats = Mock()
     myChat = myUser.get_chats().find_chat_by_id('-NT1MPxuzKdT_L0IXvD9')
-    myChat.get_message_history = lambda: []
     assert myChat is not None
     string_of_all_msgs = ''
     for msg in myChat.get_message_history():
         string_of_all_msgs = string_of_all_msgs + msg.getMessage()
-    assert string_of_all_msgs is not None
+    assert "bungus." in string_of_all_msgs
     
     #generate a random chat message to send
     mymessage = ''.join(choice(ascii_uppercase) for i in range(12))
@@ -58,7 +54,6 @@ def test_login_send_receive_message():
     
     # now check to see that the user recieved it
     myChat = myUser.get_chats().find_chat_by_id('-NT1MPxuzKdT_L0IXvD9')
-    myChat.get_message_history = lambda: [Message(mymessage,User("","",""),datetime.datetime.now())]
     assert myChat is not None
     string_of_all_msgs = ''
     for msg in myChat.get_message_history():
