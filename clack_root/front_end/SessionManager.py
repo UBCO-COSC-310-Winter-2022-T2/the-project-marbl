@@ -23,7 +23,7 @@ class SessionManager:
                 email, password)
             if ("email" in response and response["email"] == email):
                 username = self.database.get_username_from_email(
-                    email) or "anon"
+                    email.lower()) or "anon"
                 if(username == "anon"):
                     print("User does not exist in database, they are probably an old account. Functions may not work properly.")
                 my_user = User(username, "password123", email)
