@@ -19,11 +19,7 @@ class Session:
         self.email = email
         self._current_user = current_user
         from front_end.Getters import getMQTTClient
-<<<<<<< HEAD
         self._mqtt_client = getMQTTClient("test.mosquitto.org", current_user.get_username()) # type: ignore
-=======
-        self._mqtt_client = getMQTTClient("test.mosquitto.org", current_user.get_username())
->>>>>>> 9bfee9b4e3d731ea6392b2b5e074ebbc7369c336
         
     # getters
 
@@ -81,9 +77,8 @@ class Session:
         self._mqtt_client.publish("marbl/chats/"+chatid, data_out, 2)
 
     def subscribe_to_topic(self, topic: str):
-        self._mqtt_client.subscribe(topic)
-    
-<<<<<<< HEAD
+        self._mqtt_client.subscribe(topic)    
+
     def addUserToChat(username: str): # type: ignore
         pass
 

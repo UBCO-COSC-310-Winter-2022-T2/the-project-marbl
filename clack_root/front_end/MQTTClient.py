@@ -2,7 +2,7 @@ import paho.mqtt.client as mqtt
 import json
 from front_end.User import User
 from front_end.Message import Message
-from UI.chat_interface import ChatInterface
+
 
 class MQTTClient:
     def __init__(self, broker_url, client_name):
@@ -61,6 +61,7 @@ class MQTTClient:
             currChat.add_message_to_history(theMessage)
             #update UI somehow
             # UI.notify_of_new_message(chatroomid)
+            from UI.chat_interface import ChatInterface
             UI : ChatInterface = ChatInterface.instance() # type: ignore
             UI.update_UI()
         
